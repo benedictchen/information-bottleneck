@@ -15,7 +15,7 @@
 
 🌟 Optimal compression-prediction tradeoffs for principled feature extraction
 
-**Tishby, N., Pereira, F. C., & Bialek, W. (1999)** - "The Information Bottleneck Method"
+**Tishby, N., Pereira, F. C., & Bialek, W. (1999) - "The Information Bottleneck Method"**
 
 ## 📦 Installation
 
@@ -23,11 +23,32 @@
 pip install information-bottleneck
 ```
 
+## 🚀 Quick Start
+
+```python
+import information_bottleneck
+
+# Example usage
+print("✅ Information Bottleneck loaded successfully!")
+```
+
 ## 🎓 About the Implementation
 
 Implemented by **Benedict Chen** - bringing foundational AI research to modern Python.
 
 📧 Contact: benedict@benedictchen.com
+
+## 📖 Citation
+
+If you use this implementation in your research, please cite the original paper:
+
+```bibtex
+Tishby, N., Pereira, F. C., & Bialek, W. (1999) - "The Information Bottleneck Method"
+```
+
+## 📜 License
+
+Custom Non-Commercial License with Donation Requirements - See LICENSE file for details.
 
 ---
 
