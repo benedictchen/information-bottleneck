@@ -27,9 +27,24 @@ pip install information-bottleneck
 
 ```python
 import information_bottleneck
+import numpy as np
 
-# Example usage
-print("✅ Information Bottleneck loaded successfully!")
+# Create sample data
+X = np.random.randn(1000, 20)  # Input data
+Y = np.random.randint(0, 3, 1000)  # Target labels
+
+# Create Information Bottleneck
+ib = information_bottleneck.create_information_bottleneck(
+    method='discrete',
+    beta=1.0
+)
+
+# Fit the model
+ib.fit(X, Y)
+
+# Get compressed representations
+compressed = ib.transform(X)
+print(f"✅ Compressed {X.shape} → {compressed.shape}")
 ```
 
 ## 🎓 About the Implementation
