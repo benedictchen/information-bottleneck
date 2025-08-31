@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "information-bottleneck"
-version = "1.0.0"
+version = "1.1.0"
 description = "Optimal compression-prediction tradeoffs for principled feature extraction"
 readme = "README.md"
 license = {text = "Custom Non-Commercial License with Donation Requirements"}
