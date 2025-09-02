@@ -6,8 +6,8 @@ Based on: Tishby, Pereira & Bialek (1999) "The Information Bottleneck Method"
 import numpy as np
 from typing import Dict, Tuple, Optional, List
 from sklearn.cluster import KMeans
-from .mutual_info_core import MutualInfoCore
-from .ib_config import IBConfig, EncoderUpdateMethod, DecoderUpdateMethod, InitializationMethod
+from mutual_info_core import MutualInfoCore
+from ib_config import IBConfig, EncoderUpdateMethod, DecoderUpdateMethod, InitializationMethod
 
 
 class IBAlgorithms:

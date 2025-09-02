@@ -5,7 +5,7 @@ Based on: Tishby, Pereira & Bialek (1999) with neural network parameterization
 
 import numpy as np
 from typing import List, Dict, Optional, Tuple
-from .ib_config import NeuralIBConfig
+from ib_config import NeuralIBConfig
 
 
 class NeuralInformationBottleneck:
@@ -409,7 +409,7 @@ class NeuralInformationBottleneck:
         y_pred = self.predict(X)
         
         # Compute approximate mutual information
-        from .mutual_info_core import MutualInfoCore
+        from mutual_info_core import MutualInfoCore
         mi_estimator = MutualInfoCore()
         
         try:

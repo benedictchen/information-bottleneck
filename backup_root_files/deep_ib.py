@@ -21,7 +21,7 @@ except ImportError:
     TORCH_AVAILABLE = False
     warnings.warn("PyTorch not available. DeepIB will use simplified NumPy implementation.")
 
-from .mutual_info_estimator import MutualInfoEstimator
+from mutual_info_estimator import MutualInfoEstimator
 
 class DeepInformationBottleneck:
     """

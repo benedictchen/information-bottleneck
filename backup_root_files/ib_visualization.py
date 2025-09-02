@@ -7,7 +7,7 @@ import numpy as np
 from typing import List, Dict, Tuple, Optional
 import matplotlib.pyplot as plt
 import seaborn as sns
-from .mutual_info_core import MutualInfoCore
+from mutual_info_core import MutualInfoCore
 
 
 class IBVisualization:

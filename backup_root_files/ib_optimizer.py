@@ -10,7 +10,7 @@ import numpy as np
 from scipy.optimize import minimize
 from typing import Callable, Dict, Any, Optional, Tuple, Union
 import warnings
-from .mutual_info_estimator import MutualInfoEstimator
+from mutual_info_estimator import MutualInfoEstimator
 
 class IBOptimizer:
     """

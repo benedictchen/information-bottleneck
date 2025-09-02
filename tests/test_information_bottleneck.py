@@ -16,15 +16,22 @@ from pathlib import Path
 import sys
 import os
 
-# Add parent module to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+# Add src directory to path for proper imports
+src_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src')
+sys.path.insert(0, src_path)
 
 try:
-    from information_bottleneck_original import InformationBottleneck
-    from information_bottleneck_main import InformationBottleneck as IBMain
-    from ib_algorithms import IBAlgorithms
+    # Import from new src layout structure
+    from information_bottleneck import (
+        InformationBottleneck, 
+        NeuralInformationBottleneck,
+        IBConfig, 
+        IBMethod,
+        create_information_bottleneck,
+        run_ib_benchmark_suite
+    )
 except ImportError:
-    # Try alternative import paths
+    # Try alternative import paths for backward compatibility
     sys.path.insert(0, str(Path(__file__).parent.parent))
     try:
         from information_bottleneck_original import InformationBottleneck

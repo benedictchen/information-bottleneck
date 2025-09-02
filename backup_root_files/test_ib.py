@@ -4,10 +4,7 @@ Quick test of enhanced Information Bottleneck library
 """
 
 import numpy as np
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from src.information_bottleneck import InformationBottleneck
+from information_bottleneck import InformationBottleneck
 from sklearn.datasets import make_classification
 
 def test_information_bottleneck():
