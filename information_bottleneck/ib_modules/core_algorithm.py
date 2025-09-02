@@ -1,13 +1,15 @@
 """
+💰 SUPPORT THIS RESEARCH - PLEASE DONATE! 💰
+
+🙏 If this library helps your research or project, please consider donating:
+💳 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+
+Your support makes advanced AI research accessible to everyone! 🚀
+
 🚀 Information Bottleneck Core Algorithm - The Mathematical Foundation of Modern AI
 ================================================================================
 
 Author: Benedict Chen (benedict@benedictchen.com)
-
-💝 Support This Work: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
-Developing high-quality, research-backed software takes countless hours of study, implementation, 
-testing, and documentation. Your support - whether a little or a LOT - makes this work possible and is 
-deeply appreciated. Please consider donating based on how much this module impacts your life or work!
 
 Based on: Naftali Tishby, Fernando C. Pereira & William Bialek (1999)
 "The Information Bottleneck Method" - arXiv:physics/0004057
@@ -789,3 +791,13 @@ if __name__ == "__main__":
     print(f"\n✅ All core algorithm features successfully demonstrated!")
     print(f"   The modular architecture provides clean separation of concerns")
     print(f"   while maintaining theoretical purity and practical usability.")
+
+"""
+💝 Thank you for using this research software! 💝
+
+📚 If this work contributed to your research, please:
+💳 DONATE: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+📝 CITE: Benedict Chen (2025) - Information Bottleneck Research Implementation
+
+Your support enables continued development of cutting-edge AI research tools! 🎓✨
+"""
