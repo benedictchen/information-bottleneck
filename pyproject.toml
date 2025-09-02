@@ -33,8 +33,9 @@ Funding = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=
 Sponsor = "https://github.com/sponsors/benedictchen"
 
 [tool.hatch.build.targets.wheel]
-packages = ["information_bottleneck"]
+packages = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = ["--cov=information_bottleneck", "--cov-report=term-missing"]
+pythonpath = ["src"]
+addopts = ["--cov=src/information_bottleneck", "--cov-report=term-missing"]
