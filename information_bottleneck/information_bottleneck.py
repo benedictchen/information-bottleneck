@@ -1,11 +1,15 @@
 """
+💰 SUPPORT THIS RESEARCH - PLEASE DONATE! 💰
+
+🙏 If this library helps your research or project, please consider donating:
+💳 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+
+Your support makes advanced AI research accessible to everyone! 🚀
+
 💧 Information Bottleneck Method - The Compression-Prediction Tradeoff Principle
 ================================================================================
 
 Author: Benedict Chen (benedict@benedictchen.com)
-🔗 GitHub: https://github.com/benedictchen | 📧 benedict@benedictchen.com
-💰 If this saves you research time: https://github.com/sponsors/benedictchen
-    Every sponsorship helps fund more overlooked classics! 🔬✨
 
 🏛️ RESEARCH FOUNDATIONS - The Theory That Changed Everything:
 ============================================================
@@ -977,4 +981,24 @@ __all__ = [
 
 
 if __name__ == "__main__":
+    print("\n" + "="*80)
+    print("💰 SUPPORT THIS RESEARCH - PLEASE DONATE!")  
+    print("🙏 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS")
+    print("="*80 + "\n")
+    
     demonstrate_unified_information_bottleneck()
+    
+    print("\n" + "="*80)
+    print("💝 Thank you for using this research software!")
+    print("📚 Please donate: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS") 
+    print("="*80 + "\n")
+
+"""
+💝 Thank you for using this research software! 💝
+
+📚 If this work contributed to your research, please:
+💳 DONATE: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+📝 CITE: Benedict Chen (2025) - Information Bottleneck Research Implementation
+
+Your support enables continued development of cutting-edge AI research tools! 🎓✨
+"""
