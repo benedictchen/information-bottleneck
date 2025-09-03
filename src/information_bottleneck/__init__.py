@@ -49,10 +49,10 @@ def _print_attribution():
         print("   ☕ Buy me a coffee → 🍺 Buy me a beer → 🏎️ Buy me a Lamborghini → ✈️ Buy me a private jet!")
         print("   (Start small, dream big! Every donation helps! 😄)")
 
-# Import UNIFIED implementations from consolidated files
+# Import modular implementations from new structure
 from .core import (
     InformationBottleneck,
-    NeuralInformationBottleneck,
+    NeuralInformationBottleneck, 
     DeepInformationBottleneck,
     InformationBottleneckClassifier,
     IBOptimizer,
@@ -75,19 +75,24 @@ from .config import (
 )
 
 from .utils import (
+    # Math utilities
     compute_mutual_information_discrete,
     compute_mutual_information_ksg,
     safe_log,
     safe_divide,
     entropy_discrete,
     kl_divergence_discrete,
+    
+    # Data utilities  
     normalize_data,
     discretize_data,
+    create_synthetic_ib_data,
+    validate_ib_inputs,
+    
+    # Metrics
     compute_classification_metrics,
     compute_clustering_metrics,
-    compute_information_theoretic_metrics,
-    validate_ib_inputs,
-    create_synthetic_ib_data
+    compute_information_theoretic_metrics
 )
 
 from .viz import (

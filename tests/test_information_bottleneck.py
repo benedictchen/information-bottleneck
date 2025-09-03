@@ -34,9 +34,9 @@ except ImportError:
     # Try alternative import paths for backward compatibility
     sys.path.insert(0, str(Path(__file__).parent.parent))
     try:
-        from information_bottleneck_original import InformationBottleneck
-        from information_bottleneck_main import InformationBottleneck as IBMain
-        from ib_algorithms import IBAlgorithms
+        from information_bottleneck.core import InformationBottleneck
+        from information_bottleneck.core import InformationBottleneck as IBMain
+        from information_bottleneck.ib_algorithms import IBAlgorithms
     except ImportError:
         pytest.skip(f"Module information_bottleneck components not available", allow_module_level=True)
 

@@ -101,7 +101,7 @@ def test_demo_data_generation():
 def test_demo_with_real_ib_class():
     """Test demo components with actual IB class (may have limitations)"""
     try:
-        from information_bottleneck_main import InformationBottleneck
+        from information_bottleneck.core import InformationBottleneck
         
         # Create small test data
         np.random.seed(42)
