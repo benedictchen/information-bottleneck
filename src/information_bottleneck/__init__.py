@@ -60,7 +60,6 @@ from .core import (
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
-# 🔬 NEW: COMPLETE MI ESTIMATION - ALL FIXME SOLUTIONS (Added v1.2.0)
 # ═══════════════════════════════════════════════════════════════════════════
 
 # Complete MI estimation system - fixes critical O(n³) complexity issue
@@ -152,7 +151,6 @@ __all__ = [
     "MutualInfoCore",
     
     # ═══════════════════════════════════════════════════════════════════════════
-    # 🔬 NEW: COMPLETE MI ESTIMATION - ALL FIXME SOLUTIONS IMPLEMENTED (v1.2.0)
     # ═══════════════════════════════════════════════════════════════════════════
     # Complete MI estimation system - fixes critical O(n³) complexity issue
     "CompleteMutualInformationEstimator",
