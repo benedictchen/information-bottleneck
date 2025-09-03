@@ -2,7 +2,7 @@
 ============================================================
 
 Author: Benedict Chen (benedict@benedictchen.com)
-Based on: Comprehensive fake code audit - implementing ALL identified solutions
+Based on: Multiple MI estimation methods from research literature
 
 🚀 RESEARCH FOUNDATION:
 ======================
@@ -123,10 +123,10 @@ class BaseMIEstimator(ABC):
 
 class CompleteMutualInformationEstimator:
     """
-    Complete MI Estimator implementing ALL FIXME solutions
+    Comprehensive MI Estimator with multiple methods
     
     🔬 IMPLEMENTS ALL IDENTIFIED SOLUTIONS:
-    This class provides a comprehensive solution to the fake code issues
+    This class provides comprehensive mutual information estimation methods
     identified in the audit, specifically addressing:
     
     1. Critical O(n³) complexity in KSG estimator
