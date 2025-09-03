@@ -49,7 +49,6 @@ def _print_attribution():
         print("   ☕ Buy me a coffee → 🍺 Buy me a beer → 🏎️ Buy me a Lamborghini → ✈️ Buy me a private jet!")
         print("   (Start small, dream big! Every donation helps! 😄)")
 
-# Import modular implementations from new structure
 from .core import (
     InformationBottleneck,
     NeuralInformationBottleneck, 
@@ -58,6 +57,38 @@ from .core import (
     IBOptimizer,
     MutualInfoEstimator,
     MutualInfoCore
+)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 🔬 NEW: COMPLETE MI ESTIMATION - ALL FIXME SOLUTIONS (Added v1.2.0)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Complete MI estimation system - fixes critical O(n³) complexity issue
+from .complete_mi_estimator import (
+    CompleteMutualInformationEstimator,
+    EfficientKSGEstimator,
+    LegacyKSGEstimator,
+    AdaptiveBinningEstimator,
+    MINEEstimator,
+    HistogramEstimator,
+    SklearnMIEstimator,
+    MIEstimationResult,
+    create_efficient_mi_estimator,
+    create_research_mi_estimator,
+    create_legacy_mi_estimator
+)
+
+# Complete configuration system for MI estimation
+from .mi_estimation_config import (
+    MIEstimationConfig,
+    MIEstimationMethod,
+    OptimizationStrategy,
+    DataCharacteristics,
+    create_research_accurate_config,
+    create_high_performance_config,
+    create_legacy_compatible_config,
+    create_ensemble_config,
+    create_gpu_accelerated_config
 )
 
 from .config import (
@@ -111,7 +142,7 @@ __authors__ = ["Based on Tishby, Pereira & Bialek (1999)"]
 
 # Define explicit public API - UNIFIED STRUCTURE
 __all__ = [
-    # Core algorithms (consolidated from scattered files)
+    # Core algorithms (consolidated from scattered files) - ALL PRESERVED
     "InformationBottleneck", 
     "NeuralInformationBottleneck",
     "DeepInformationBottleneck",
@@ -120,7 +151,25 @@ __all__ = [
     "MutualInfoEstimator",
     "MutualInfoCore",
     
-    # Configuration classes (unified config system)
+    # ═══════════════════════════════════════════════════════════════════════════
+    # 🔬 NEW: COMPLETE MI ESTIMATION - ALL FIXME SOLUTIONS IMPLEMENTED (v1.2.0)
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Complete MI estimation system - fixes critical O(n³) complexity issue
+    "CompleteMutualInformationEstimator",
+    "create_efficient_mi_estimator",
+    "create_research_mi_estimator", 
+    "create_legacy_mi_estimator",
+    "MIEstimationResult",
+    
+    # Individual estimator classes for advanced usage
+    "EfficientKSGEstimator",
+    "LegacyKSGEstimator",
+    "AdaptiveBinningEstimator",
+    "MINEEstimator",
+    "HistogramEstimator",
+    "SklearnMIEstimator",
+    
+    # Configuration classes (unified config system) - ALL PRESERVED
     "IBConfig",
     "NeuralIBConfig",
     "DeepIBConfig", 
@@ -129,6 +178,17 @@ __all__ = [
     "InitializationMethod",
     "MutualInfoEstimatorEnum",
     "OptimizationMethod",
+    
+    # NEW: Complete MI estimation configuration system
+    "MIEstimationConfig",
+    "MIEstimationMethod", 
+    "OptimizationStrategy",
+    "DataCharacteristics",
+    "create_research_accurate_config",
+    "create_high_performance_config",
+    "create_legacy_compatible_config",
+    "create_ensemble_config",
+    "create_gpu_accelerated_config",
     
     # Factory functions for easy configuration
     "create_discrete_ib_config",

@@ -384,7 +384,7 @@ if __name__ == "__main__":
         print(f"   Bottleneck shape: {T.shape}")
         print(f"   Compression ratio: {T.shape[1]/X.shape[1]:.2f}")
         
-        print("\n🚀 All basic tests passed! Run 'pytest test_information_bottleneck.py -v' for full suite")
+        print("\nAll basic tests passed! Run 'pytest test_information_bottleneck.py -v' for full suite")
         
     except Exception as e:
         print(f"❌ Test failed: {e}")

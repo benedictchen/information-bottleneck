@@ -1,12 +1,75 @@
 """
-Information Bottleneck Core Mixins - Mathematical Foundation
-============================================================
-
-Core functionality mixins broken out from core.py to meet 800-line limit.
-Contains the mathematical foundation and algorithmic implementations.
+🧮 Information Bottleneck - Core Mathematical Mixins
+===================================================
 
 Author: Benedict Chen (benedict@benedictchen.com)
-Based on: Naftali Tishby, Fernando C. Pereira & William Bialek (1999)
+
+💰 Donations: Help support this research!
+   PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+   💖 Please consider recurring donations to support continued information theory research
+
+Core mathematical foundation mixins for the Information Bottleneck method.
+Contains the fundamental algorithms and theory from Tishby, Pereira & Bialek (1999).
+
+🔬 Research Foundation:
+======================
+Mathematical theory based on:
+- Tishby, Pereira & Bialek (1999): "The Information Bottleneck Method"
+- Tishby & Zaslavsky (2015): "Deep Learning and the Information Bottleneck Principle"  
+- Alemi et al. (2016): "Deep Variational Information Bottleneck"
+- Kolchinsky et al. (2017): "Nonlinear Information Bottleneck"
+
+ELI5 Explanation:
+================
+Think of the Information Bottleneck like a smart librarian organizing books! 📚
+
+📖 **The Library Analogy**:
+You have a huge, messy library (input data X) and need to create a concise catalog (T) 
+that helps people find the specific books they want (predict Y):
+
+- **Too detailed catalog** = Remembers everything but takes forever to search through
+- **Too simple catalog** = Fast to search but missing important details
+- **Information Bottleneck** = Perfect balance: keeps just enough detail to be useful
+
+🧠 **The Smart Librarian Process**:
+1. **Compression**: "What's the minimum information I need to keep?"
+2. **Relevance**: "What information actually helps people find what they want?"
+3. **Optimization**: "How do I balance between being concise and being helpful?"
+
+ASCII Information Flow:
+======================
+    INPUT DATA        BOTTLENECK        PREDICTION
+    ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+    │ X (complex) │──▶│ T (compact) │──▶│ Y (target)  │
+    │ ████████    │   │ ████        │   │ ████        │
+    │ ████████    │   │ ░░░░        │   │ ████        │
+    │ ████████    │   │ ████        │   │ ░░░░        │
+    │ ████████    │   │ ░░░░        │   │ ████        │
+    └─────────────┘   └─────────────┘   └─────────────┘
+           │               │               │
+           │ I(X;T)        │ I(T;Y)        │
+           │ (complexity)  │ (relevance)   │
+           │               │               │
+    ┌──────▼───────────────▼───────────────▼──────┐
+    │ Optimize: max I(T;Y) - β·I(X;T)            │
+    │                                             │
+    │ β controls compression-relevance tradeoff   │
+    └─────────────────────────────────────────────┘
+
+📊 Mathematical Core:
+====================
+**Information Bottleneck Objective:**
+L = I(T;Y) - β·I(X;T)
+
+**Mutual Information:**
+I(X;T) = ∫∫ p(x,t) log(p(x,t)/(p(x)p(t))) dx dt
+
+**Self-Consistent Equations:**
+p(t|x) = p(t)/Z(x,β) exp(β·D_KL[p(y|x)||p(y|t)])
+p(t) = ∫ p(t|x)p(x) dx
+p(y|t) = ∫ p(y|x)p(x|t) dx
+
+Where β controls the compression-prediction tradeoff.
 """
 
 import numpy as np
