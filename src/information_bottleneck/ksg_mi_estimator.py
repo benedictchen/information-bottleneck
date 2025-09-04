@@ -4,10 +4,9 @@
 Author: Benedict Chen (benedict@benedictchen.com)
 Based on: Multiple MI estimation methods from research literature
 
-🚀 RESEARCH FOUNDATION:
+Research Foundation:
 ======================
-This implements ALL solutions for the critical O(n³) mutual information 
-computation issue that makes Information Bottleneck unusable for real datasets.
+Multiple mutual information estimators for Information Bottleneck computation.
 
 📚 **Research Basis**:
 - Kraskov, Stögbauer & Grassberger (2004) "Estimating mutual information"

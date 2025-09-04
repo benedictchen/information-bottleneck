@@ -494,15 +494,71 @@ class MutualInfoCore:
     
     @staticmethod
     def compute_joint_entropy(X, Y, bins='auto'):
-        """Compute joint entropy H(X,Y)."""
-        # Implementation would go here
-        pass
+        """
+        Compute joint entropy H(X,Y) using histogram estimation.
+        
+        Args:
+            X, Y: Input arrays
+            bins: Number of bins for histogram ('auto' uses Sturges' rule)
+            
+        Returns:
+            float: Joint entropy H(X,Y) in bits
+        """
+        # Convert to numpy arrays
+        X = np.asarray(X).flatten()
+        Y = np.asarray(Y).flatten()
+        
+        # Determine bin count using Sturges' rule if auto
+        if bins == 'auto':
+            bins = int(np.ceil(np.log2(len(X)) + 1))
+        
+        # Create joint histogram
+        joint_hist, _, _ = np.histogram2d(X, Y, bins=bins)
+        
+        # Convert to probabilities (normalize)
+        joint_prob = joint_hist / np.sum(joint_hist)
+        
+        # Remove zero probabilities to avoid log(0)
+        joint_prob = joint_prob[joint_prob > 0]
+        
+        # Compute joint entropy: H(X,Y) = -Σ p(x,y) log₂ p(x,y)
+        joint_entropy = -np.sum(joint_prob * np.log2(joint_prob))
+        
+        return joint_entropy
     
     @staticmethod
     def compute_conditional_entropy(X, Y, bins='auto'):
-        """Compute conditional entropy H(Y|X)."""
-        # Implementation would go here  
-        pass
+        """
+        Compute conditional entropy H(Y|X) = H(X,Y) - H(X).
+        
+        Args:
+            X, Y: Input arrays
+            bins: Number of bins for histogram estimation
+            
+        Returns:
+            float: Conditional entropy H(Y|X) in bits
+        """
+        # Convert to numpy arrays
+        X = np.asarray(X).flatten()
+        Y = np.asarray(Y).flatten()
+        
+        # Determine bin count using Sturges' rule if auto
+        if bins == 'auto':
+            bins = int(np.ceil(np.log2(len(X)) + 1))
+        
+        # Compute H(X,Y)
+        joint_entropy = InformationBottleneckCore.compute_joint_entropy(X, Y, bins)
+        
+        # Compute H(X) - marginal entropy of X
+        x_hist, _ = np.histogram(X, bins=bins)
+        x_prob = x_hist / np.sum(x_hist)
+        x_prob = x_prob[x_prob > 0]  # Remove zeros
+        marginal_entropy_x = -np.sum(x_prob * np.log2(x_prob))
+        
+        # H(Y|X) = H(X,Y) - H(X)
+        conditional_entropy = joint_entropy - marginal_entropy_x
+        
+        return conditional_entropy
     
     @staticmethod
     def compute_kl_divergence(P, Q):

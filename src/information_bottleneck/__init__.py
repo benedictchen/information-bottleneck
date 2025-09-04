@@ -63,7 +63,7 @@ from .core import (
 # ═══════════════════════════════════════════════════════════════════════════
 
 # Complete MI estimation system - fixes critical O(n³) complexity issue
-from .complete_mi_estimator import (
+from .ksg_mi_estimator import (
     CompleteMutualInformationEstimator,
     EfficientKSGEstimator,
     LegacyKSGEstimator,

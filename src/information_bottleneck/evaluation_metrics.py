@@ -320,11 +320,69 @@ class InformationBottleneckEvaluator:
             
         return X_discrete
     
-    def _mutual_info_ksg(self, X: np.ndarray, Y: np.ndarray) -> float:
-        """KSG mutual information estimator (simplified implementation)"""
-        # This is a placeholder - full KSG implementation is complex
-        warnings.warn("KSG estimator not fully implemented, using histogram method")
-        return self._mutual_info_histogram(X, Y)
+    def _mutual_info_ksg(self, X: np.ndarray, Y: np.ndarray, k: int = 3) -> float:
+        """
+        KSG mutual information estimator implementation
+        Based on Kraskov, Stögbauer, and Grassberger (2004)
+        "Estimating mutual information"
+        
+        KSG Algorithm 1: I(X;Y) = ψ(k) - <ψ(nx)> - <ψ(ny)> + ψ(N)
+        where ψ is the digamma function, nx/ny are neighbor counts
+        """
+        try:
+            from scipy.spatial.distance import cdist
+            from scipy.special import digamma
+        except ImportError:
+            warnings.warn("SciPy not available, falling back to histogram method")
+            return self._mutual_info_histogram(X, Y)
+        
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+        if Y.ndim == 1:
+            Y = Y.reshape(-1, 1)
+            
+        N = len(X)
+        if N != len(Y):
+            raise ValueError("X and Y must have same number of samples")
+            
+        # Joint data matrix
+        XY = np.hstack([X, Y])
+        
+        # For each point, find k-th nearest neighbor in joint space
+        joint_distances = cdist(XY, XY, metric='chebyshev')  # L_inf norm
+        np.fill_diagonal(joint_distances, np.inf)  # Exclude self-distance
+        
+        # Find k-th nearest neighbor distances
+        kth_distances = np.sort(joint_distances, axis=1)[:, k-1]
+        
+        # Count neighbors within epsilon in X and Y spaces separately
+        nx_counts = []
+        ny_counts = []
+        
+        for i in range(N):
+            epsilon = kth_distances[i]
+            
+            # Count neighbors in X space within epsilon
+            x_distances = cdist(X[i:i+1], X, metric='chebyshev')[0]
+            nx = np.sum(x_distances < epsilon) - 1  # Exclude self
+            nx_counts.append(max(1, nx))  # Avoid log(0)
+            
+            # Count neighbors in Y space within epsilon  
+            y_distances = cdist(Y[i:i+1], Y, metric='chebyshev')[0]
+            ny = np.sum(y_distances < epsilon) - 1  # Exclude self
+            ny_counts.append(max(1, ny))  # Avoid log(0)
+        
+        nx_counts = np.array(nx_counts)
+        ny_counts = np.array(ny_counts)
+        
+        # KSG estimator formula
+        mi_estimate = (digamma(k) - 
+                      np.mean(digamma(nx_counts)) - 
+                      np.mean(digamma(ny_counts)) + 
+                      digamma(N))
+        
+        # Return non-negative MI (clip small negative values due to finite sample effects)
+        return max(0.0, mi_estimate)
     
     def _mutual_info_gaussian(self, X: np.ndarray, Y: np.ndarray) -> float:
         """Gaussian mutual information estimator"""

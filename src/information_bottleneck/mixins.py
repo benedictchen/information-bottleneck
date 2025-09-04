@@ -115,8 +115,10 @@ class CoreTheoryMixin:
         # Lower β emphasizes relevance (higher I(X̃;Y))
         # return I_TX - beta * I_TY  # This is what we minimize
         """
-        # FIXME: Sign convention should match paper's minimization objective
-        return I_TY - beta * I_TX
+        # ✅ FIXED: Using paper's exact formulation (Tishby et al. 1999, equation 15)
+        # From paper: minimize L[p(x̃|x)] = I(X̃;X) - βI(X̃;Y)
+        # We return the value to be MINIMIZED
+        return I_TX - beta * I_TY
     
     def compute_theoretical_bounds(self, X, Y):
         """Compute theoretical Information Bottleneck bounds."""

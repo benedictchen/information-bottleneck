@@ -250,9 +250,22 @@ class IBAlgorithms:
         # This is not exact KL but provides the right optimization direction
         y_given_x = self.p_y_given_z[z, :]  # Current prediction for z
         
-        # Compute approximate divergence (placeholder implementation)
-        # In full implementation, this would compute actual KL divergence
-        kl_div = np.sum((y_given_x - 0.5)**2)  # Simplified version
+        # Compute actual KL divergence D_KL(p(y|z) || p(y)) based on Tishby et al. (1999)
+        # KL divergence: sum_y p(y|z) * log(p(y|z) / p(y))
+        
+        # Get marginal distribution p(y) 
+        p_y = np.sum(self.p_y_given_z * self.p_z[:, np.newaxis], axis=0)
+        p_y = np.maximum(p_y, 1e-12)  # Avoid log(0)
+        
+        # Ensure p(y|z) is normalized and positive
+        y_given_z_normalized = np.maximum(y_given_x, 1e-12)
+        y_given_z_normalized = y_given_z_normalized / np.sum(y_given_z_normalized)
+        
+        # Compute KL divergence: D_KL(p(y|z) || p(y))
+        kl_div = 0.0
+        for y_idx in range(len(y_given_z_normalized)):
+            if y_given_z_normalized[y_idx] > 1e-12:
+                kl_div += y_given_z_normalized[y_idx] * np.log(y_given_z_normalized[y_idx] / p_y[y_idx])
         
         return kl_div
     

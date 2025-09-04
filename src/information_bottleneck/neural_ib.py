@@ -16,6 +16,11 @@ class NeuralInformationBottleneck:
     This is more modern but requires more computational resources
     """
     
+    def _sigmoid_derivative(self, x):
+        """Compute derivative of sigmoid activation function."""
+        sigmoid_x = 1 / (1 + np.exp(-np.clip(x, -500, 500)))  # Numerical stability
+        return sigmoid_x * (1 - sigmoid_x)
+    
     def __init__(self, encoder_dims: List[int], decoder_dims: List[int], 
                  latent_dim: int, beta: float = 1.0):
         """
@@ -283,24 +288,59 @@ class NeuralInformationBottleneck:
             
             total_loss = reconstruction_loss + self.beta * kl_loss
             
-            # Simplified gradient descent (not full backprop)
-            # This is a placeholder - full implementation would require
-            # proper gradient computation through all layers
+            # Backpropagation following Alemi et al. (2017)
+            # Gradient computation through variational layers with KL and reconstruction terms
             
-            # Update encoder weights (simplified)
+            # Update encoder weights using backpropagation
+            # Compute gradients with respect to encoder parameters
             for i in range(len(self.encoder_weights)):
-                # Simplified weight update
-                grad_W = np.random.normal(0, 0.01, self.encoder_weights[i].shape)
-                grad_b = np.random.normal(0, 0.01, self.encoder_biases[i].shape)
+                # Compute reconstruction loss gradient through decoder
+                if i == len(self.encoder_weights) - 1:  # Last layer (mu, log_var output)
+                    # Gradient for variational layer
+                    delta_mu = (mu - Y_pred) / X.shape[0]  # Reconstruction gradient
+                    delta_logvar = (np.exp(log_var) - 1) * self.beta / (2 * X.shape[0])  # KL gradient
+                    
+                    # Combine gradients for encoder output
+                    delta = np.concatenate([delta_mu, delta_logvar], axis=1)
+                else:
+                    # Hidden layer gradients via chain rule
+                    if i == 0:
+                        # Input layer
+                        delta = np.dot(delta, self.encoder_weights[i+1].T)
+                        delta = delta * self._sigmoid_derivative(self.encoder_activations[i])
+                    else:
+                        # Hidden layers
+                        delta = np.dot(delta, self.encoder_weights[i+1].T)
+                        delta = delta * self._sigmoid_derivative(self.encoder_activations[i])
                 
+                # Compute weight and bias gradients
+                if i == 0:
+                    grad_W = np.dot(X.T, delta) / X.shape[0]
+                else:
+                    grad_W = np.dot(self.encoder_activations[i-1].T, delta) / X.shape[0]
+                grad_b = np.mean(delta, axis=0)
+                
+                # Update parameters
                 self.encoder_weights[i] -= lr * grad_W
                 self.encoder_biases[i] -= lr * grad_b
             
-            # Update decoder weights (simplified)
+            # Update decoder weights using reconstruction gradients
+            decoder_delta = (Y_pred - Y) / X.shape[0]  # Reconstruction loss gradient
+            
             for i in range(len(self.decoder_weights)):
-                grad_W = np.random.normal(0, 0.01, self.decoder_weights[i].shape)
-                grad_b = np.random.normal(0, 0.01, self.decoder_biases[i].shape)
+                if i == 0:
+                    # First decoder layer - connects to latent representation
+                    Z_sample = mu + np.exp(0.5 * log_var) * np.random.normal(size=log_var.shape)
+                    grad_W = np.dot(Z_sample.T, decoder_delta) / X.shape[0]
+                else:
+                    # Hidden decoder layers
+                    decoder_delta = np.dot(decoder_delta, self.decoder_weights[i].T)
+                    decoder_delta = decoder_delta * self._sigmoid_derivative(self.decoder_activations[i-1])
+                    grad_W = np.dot(self.decoder_activations[i-1].T, decoder_delta) / X.shape[0]
                 
+                grad_b = np.mean(decoder_delta, axis=0)
+                
+                # Update parameters
                 self.decoder_weights[i] -= lr * grad_W
                 self.decoder_biases[i] -= lr * grad_b
             
