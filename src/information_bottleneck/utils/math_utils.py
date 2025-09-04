@@ -8,8 +8,9 @@ Author: Benedict Chen (benedict@benedictchen.com)
 """
 
 import numpy as np
-from typing import Union, Optional, Tuple
+from typing import Union, Optional, Tuple, List
 from scipy.stats import entropy
+from sklearn.neighbors import NearestNeighbors
 
 
 def safe_log(x: Union[float, np.ndarray], base: float = 2.0, epsilon: float = 1e-12) -> Union[float, np.ndarray]:

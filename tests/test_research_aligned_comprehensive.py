@@ -55,7 +55,7 @@ class TestResearchFoundation:
         The information bottleneck functional L = I(X;T) - β I(T;Y)
         where T is the bottleneck variable that compresses X while preserving information about Y.
         """
-        # Create simple test data that demonstrates IB principle
+        # Create test data that demonstrates IB principle
         np.random.seed(42)
         X = np.random.randn(100, 5)  # Input features
         Y = np.sum(X[:, :2], axis=1) > 0  # Target depends on first 2 features only

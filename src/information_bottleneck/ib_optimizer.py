@@ -1,9 +1,18 @@
 """
 Information Bottleneck Optimizer
-Based on: Tishby, Pereira & Bialek (1999) "The Information Bottleneck Method"
+================================
+
+📊 Information Bottleneck Library - Made possible by Benedict Chen
+   benedict@benedictchen.com
+   Support his work: 🍺 Buy him a beer: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+   💖 Sponsor: https://github.com/sponsors/benedictchen
 
 Implements optimization algorithms for finding optimal representations
 that maximize I(T; Y) while minimizing I(X; T) subject to constraints.
+
+📚 Research Foundation:
+- Tishby, Pereira & Bialek (1999) "The Information Bottleneck Method"
+- Optimization algorithms for information-theoretic representation learning
 """
 
 import numpy as np

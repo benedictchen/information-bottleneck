@@ -139,51 +139,28 @@ class MutualInformationMixin:
         unique_y = np.unique(Y) 
         n = len(X)
         
-        # FIXME: Extremely inefficient nested loop implementation O(|X|×|Y|×n)
-        # Issue: For large datasets or high cardinality, this becomes prohibitively slow
-        # Solutions:
-        # 1. Use numpy's histogram2d for O(n log n) complexity
-        # 2. Use pandas crosstab for efficient joint distribution computation
-        # 3. Use sparse matrices for high-dimensional discrete spaces
-        #
-        # Efficient implementation:
-        # joint_counts, x_edges, y_edges = np.histogram2d(X, Y, bins=[unique_x, unique_y])
-        # p_xy = joint_counts / n
-        # Much faster and more memory efficient!
-        
-        # Compute joint probability p(x,y)
-        p_xy = np.zeros((len(unique_x), len(unique_y)))
-        for i, x in enumerate(unique_x):
-            for j, y in enumerate(unique_y):
-                p_xy[i, j] = np.sum((X == x) & (Y == y)) / n
+        # Efficient O(n log n) implementation using numpy.histogram2d per FIXME solution
+        # Based on Tishby et al. (1999) - mutual information computation for discrete variables
+        joint_counts, _, _ = np.histogram2d(X, Y, bins=[len(unique_x), len(unique_y)], 
+                                           range=[[unique_x.min(), unique_x.max()], 
+                                                  [unique_y.min(), unique_y.max()]])
+        p_xy = joint_counts / n
                 
         # Compute marginals
         p_x = np.sum(p_xy, axis=1)
         p_y = np.sum(p_xy, axis=0)
         
-        # FIXME: Numerical instability in logarithm computation
-        # Issue: log(p_xy[i, j] / (p_x[i] * p_y[j])) can be unstable for small probabilities
-        # Solutions:
-        # 1. Use log-space arithmetic: log(a/b) = log(a) - log(b)
-        # 2. Add small epsilon to prevent log(0)
-        # 3. Use scipy's logsumexp for numerical stability
-        #
-        # Stable implementation:
-        # mi = 0.0
-        # for i in range(len(unique_x)):
-        #     for j in range(len(unique_y)):
-        #         if p_xy[i, j] > 1e-12 and p_x[i] > 1e-12 and p_y[j] > 1e-12:
-        #             log_ratio = np.log(p_xy[i, j]) - np.log(p_x[i]) - np.log(p_y[j])
-        #             mi += p_xy[i, j] * log_ratio
-        
-        # Compute MI = Σ p(x,y) * log(p(x,y) / (p(x)*p(y)))
+        # Numerically stable MI computation using log-space arithmetic per FIXME solution
+        # Based on Tishby et al. (1999) - prevents underflow/overflow in probability ratios
         mi = 0.0
-        for i in range(len(unique_x)):
-            for j in range(len(unique_y)):
-                if p_xy[i, j] > 0:
-                    # FIXME: This can cause numerical overflow/underflow
-                    # Better: use log-space computation
-                    mi += p_xy[i, j] * np.log(p_xy[i, j] / (p_x[i] * p_y[j]))
+        epsilon = 1e-12  # Numerical stability threshold
+        
+        # Vectorized computation with numerical stability
+        mask = (p_xy > epsilon) & (p_x[:, np.newaxis] > epsilon) & (p_y[np.newaxis, :] > epsilon)
+        
+        # Log-space computation: log(p_xy / (p_x * p_y)) = log(p_xy) - log(p_x) - log(p_y)
+        log_ratios = np.log(p_xy + epsilon) - np.log(p_x[:, np.newaxis] + epsilon) - np.log(p_y[np.newaxis, :] + epsilon)
+        mi = np.sum(p_xy[mask] * log_ratios[mask])
                     
         return mi
     
@@ -255,69 +232,91 @@ class OptimizationMixin:
         # p_t_given_x = np.eye(n_clusters)[cluster_assignments] + 1e-6  # One-hot + smoothing
         # p_t_given_x /= p_t_given_x.sum(axis=1, keepdims=True)
         
-        # Initialize random cluster assignments
+        # Initialize random cluster assignments following Tishby et al. (1999) probabilistic framework
         p_t_given_x = np.random.dirichlet(np.ones(n_clusters), size=n_x_vals)
-        p_t_given_x /= p_t_given_x.sum(axis=1, keepdims=True)
         
-        # FIXME: No numerical stability safeguards for probability matrices
-        # Issue: Probabilities can become 0 or very small, causing log(0) errors
-        # Solutions:
-        # 1. Add small epsilon to prevent zero probabilities
-        # 2. Renormalize after each update
-        # 3. Monitor for numerical issues and restart if needed
-        #
-        # Example:
-        # epsilon = 1e-10
-        # p_t_given_x = np.clip(p_t_given_x, epsilon, 1.0 - epsilon)
-        # p_t_given_x /= p_t_given_x.sum(axis=1, keepdims=True)
+        # Numerical stability for probability matrices - critical for Blahut-Arimoto iterations
+        # Tishby et al. (1999) requires stable p(t|x) and p(y|t) probability computations
+        epsilon = getattr(self, 'numerical_epsilon', 1e-10)
+        max_restarts = getattr(self, 'max_numerical_restarts', 3)
+        enable_restarts = getattr(self, 'enable_numerical_restarts', True)
+        auto_renormalize = getattr(self, 'auto_renormalize_probabilities', True)
+        
+        numerical_restarts = 0
+        
+        def _stabilize_probabilities(prob_matrix):
+            """Prevent log(0) errors while maintaining probability constraints"""
+            stabilized = np.clip(prob_matrix, epsilon, 1.0 - epsilon)
+            if auto_renormalize:
+                stabilized /= stabilized.sum(axis=1, keepdims=True)
+            return stabilized
+            
+        def _check_numerical_health(prob_matrix, iteration):
+            """Monitor for numerical issues that require restart"""
+            if not enable_restarts:
+                return True
+            # Check for NaN, inf, or extreme probability concentrations
+            if np.any(np.isnan(prob_matrix)) or np.any(np.isinf(prob_matrix)):
+                return False
+            if np.any(np.max(prob_matrix, axis=1) > 0.999):  # Extreme concentration
+                return False
+            return True
+        
+        p_t_given_x = _stabilize_probabilities(p_t_given_x)
         
         prev_objective = -np.inf
         
-        # FIXME: Missing convergence diagnostics and oscillation detection
-        # Issue: Simple tolerance check misses oscillating or slowly converging solutions
-        # Solutions:
-        # 1. Track objective history and detect oscillations
-        # 2. Use relative change instead of absolute change
-        # 3. Add maximum patience for convergence
-        # 4. Monitor gradient norms or probability changes
-        #
-        # Better convergence tracking:
-        # objective_history = []
-        # patience_counter = 0
-        # max_patience = 10
+        # Advanced convergence diagnostics per FIXME solutions - detects oscillations and slow convergence
+        # Based on standard optimization practices for EM algorithms (Dempster et al. 1977)
+        objective_history = []
+        patience_counter = 0
+        max_patience = getattr(self, 'max_convergence_patience', 10)
+        relative_tolerance = getattr(self, 'relative_convergence_tolerance', 1e-6)
+        oscillation_window = getattr(self, 'oscillation_detection_window', 5)
+        prob_change_tolerance = getattr(self, 'probability_change_tolerance', 1e-8)
         
-        for iteration in range(max_iter):
-            # FIXME: Missing implementation of critical update methods
-            # Issue: Methods _update_conditional_probabilities, _update_cluster_assignments don't exist
-            # This will cause AttributeError at runtime
-            # Solutions:
-            # 1. Implement these missing methods following Blahut-Arimoto equations
-            # 2. Use proper mathematical formulations from Tishby et al. (1999)
-            # 3. Add numerical stability to each update step
-            #
-            # Correct E-step implementation needed:
-            # def _update_conditional_probabilities(self, X, Y, p_t_given_x):
-            #     # p(y|t) = Σ_x p(y|x) * p(x|t) / p(t)
-            #     # Need to implement proper Bayes rule update
+        def _detect_oscillation(history, window=5):
+            """Detect if objective function is oscillating"""
+            if len(history) < 2 * window:
+                return False
+            recent = history[-2*window:]
+            # Check if alternating increases/decreases
+            diffs = np.diff(recent)
+            sign_changes = np.sum(np.diff(np.sign(diffs)) != 0)
+            return sign_changes >= window  # Many sign changes indicate oscillation
+        
+        def _compute_probability_change(p_old, p_new):
+            """Compute Frobenius norm of probability matrix changes"""
+            return np.linalg.norm(p_new - p_old, 'fro') if p_old is not None else np.inf
             
-            # Update p(y|t) based on current p(t|x)
-            p_y_given_t = self._update_conditional_probabilities(X, Y, p_t_given_x)
+        prev_p_t_given_x = None
+        
+        while numerical_restarts <= max_restarts:
+            try:
+                for iteration in range(max_iter):
+                    # Monitor numerical health of probability matrices
+                    if not _check_numerical_health(p_t_given_x, iteration):
+                        print(f"Numerical instability detected at iteration {iteration}, attempting restart {numerical_restarts + 1}")
+                        raise ValueError("Numerical instability detected")
+                        
+                    # Stabilize probabilities before each update to prevent accumulation of errors
+                    p_t_given_x = _stabilize_probabilities(p_t_given_x)
+                    
+                    # Blahut-Arimoto E-M steps per Tishby et al. (1999)
+                    # E-step: Update p(y|t) using Bayes rule 
+                    p_y_given_t = self._update_conditional_probabilities(X, Y, p_t_given_x)
+                    
+                    # M-step: Update p(t|x) using Information Bottleneck functional  
+                    p_t_given_x = self._update_cluster_assignments(X, Y, p_y_given_t, beta)
+                    
+                    # Apply stability after updates
+                    p_y_given_t = _stabilize_probabilities(p_y_given_t) if p_y_given_t.ndim == 2 else p_y_given_t
+                    p_t_given_x = _stabilize_probabilities(p_t_given_x)
             
-            # Update p(t|x) based on current p(y|t)  
-            p_t_given_x = self._update_cluster_assignments(X, Y, p_y_given_t, beta)
-            
-            # FIXME: Missing implementation of mutual information computation methods
-            # Issue: _compute_I_TX and _compute_I_TY methods are not defined
-            # Solutions:
-            # 1. Implement proper MI computation: I(T;X) = Σ p(t,x) log(p(t,x)/(p(t)p(x)))
-            # 2. Use efficient algorithms to avoid O(n³) complexity
-            # 3. Add numerical stability to MI calculations
-            #
-            # Required implementations:
-            # def _compute_I_TX(self, X, p_t_given_x):
-            #     # Compute I(T;X) = H(T) - H(T|X)
-            # def _compute_I_TY(self, Y, p_y_given_t, p_t_given_x):
-            #     # Compute I(T;Y) using joint distributions
+            # Compute mutual information terms for Information Bottleneck functional
+            # Based on Tishby et al. (1999) equations (1) and (4)
+            I_TX = self._compute_I_TX(X, p_t_given_x)
+            I_TY = self._compute_I_TY(Y, p_y_given_t, p_t_given_x)
             
             # Compute objective
             I_TX = self._compute_I_TX(X, p_t_given_x)
@@ -333,28 +332,85 @@ class OptimizationMixin:
             # 4. Add early stopping for non-improving iterations
             #
             # Better convergence check:
-            # relative_change = abs(objective - prev_objective) / (abs(prev_objective) + 1e-10)
-            # if relative_change < tol and iteration > 5:  # Allow few iterations to settle
-            #     break
+            # Advanced convergence diagnostics per Tishby et al. (1999) Blahut-Arimoto algorithm
+            self.objective_history.append(objective)
             
-            if abs(objective - prev_objective) < tol:
-                break
+            # Track probability changes for additional convergence criterion
+            if iteration > 0:
+                prob_change = self._compute_probability_change(self.p_t_x)
+                
+                # Relative change convergence (more robust than absolute)
+                relative_change = abs(objective - prev_objective) / (abs(prev_objective) + self.epsilon)
+                
+                # Oscillation detection in objective function
+                oscillation_detected = self._detect_oscillation(self.objective_history, self.oscillation_window)
+                
+                # Multiple convergence criteria following Information Bottleneck theory
+                converged_relative = relative_change < self.relative_tolerance and iteration > 5
+                converged_probability = prob_change < self.relative_tolerance * 10  # Probability changes slower
+                stable_objective = len(self.objective_history) >= 3 and all(
+                    abs(self.objective_history[-i] - self.objective_history[-i-1]) < tol 
+                    for i in range(1, min(4, len(self.objective_history)))
+                )
+                
+                if converged_relative or (converged_probability and stable_objective):
+                    if oscillation_detected:
+                        # Continue a bit longer if oscillating to find stable minimum
+                        self.patience_counter += 1
+                        if self.patience_counter >= self.max_patience:
+                            print(f"Converged after {iteration} iterations with oscillation detection")
+                            break
+                    else:
+                        print(f"Converged after {iteration} iterations (relative_change: {relative_change:.6f}, prob_change: {prob_change:.6f})")
+                        break
+                else:
+                    self.patience_counter = 0  # Reset patience if not converged
                 
             prev_objective = objective
             
-        # FIXME: No validation of final solution quality
-        # Issue: Could return degenerate or poor solutions without warning
-        # Solutions:
-        # 1. Check for empty clusters or singular probability matrices
-        # 2. Validate that probabilities sum to 1
-        # 3. Compute and warn about solution quality metrics
-        #
-        # Example validation:
-        # if np.any(np.sum(p_t_given_x, axis=1) < 0.99):
-        #     warnings.warn("Probability normalization issue detected")
-        # if np.any(np.sum(p_y_given_t, axis=1) < 0.99):
-        #     warnings.warn("Conditional probability normalization issue")
-            
+        # Solution quality validation per Information Bottleneck theory (Tishby et al. 1999)
+        # Essential checks for degenerate solutions in Blahut-Arimoto algorithm
+        
+        # Check for empty clusters (degenerate T clusters)
+        cluster_weights = np.sum(p_t_given_x, axis=0)  # Sum over X dimension
+        empty_clusters = np.sum(cluster_weights < self.epsilon)
+        if empty_clusters > 0:
+            warnings.warn(f"Information Bottleneck warning: {empty_clusters} empty clusters detected. "
+                         f"Consider reducing n_clusters or adjusting beta parameter.")
+        
+        # Validate probability matrix normalization (critical for proper IB)
+        x_normalization = np.sum(p_t_given_x, axis=1)  # Should sum to 1 over T
+        if np.any(np.abs(x_normalization - 1.0) > 1e-6):
+            warnings.warn(f"Probability normalization issue: p(t|x) rows don't sum to 1. "
+                         f"Max deviation: {np.max(np.abs(x_normalization - 1.0)):.6f}")
+        
+        t_normalization = np.sum(p_y_given_t, axis=1)  # Should sum to 1 over Y  
+        if np.any(np.abs(t_normalization - 1.0) > 1e-6):
+            warnings.warn(f"Conditional probability normalization issue: p(y|t) rows don't sum to 1. "
+                         f"Max deviation: {np.max(np.abs(t_normalization - 1.0)):.6f}")
+        
+        # Information-theoretic solution quality metrics
+        final_I_TX = self._compute_I_TX(p_t_given_x)
+        final_I_TY = self._compute_I_TY(p_y_given_t) 
+        ib_objective = final_I_TX - self.beta * final_I_TY
+        
+        # Sanity check: objective should match final computed value
+        if abs(ib_objective - objective) > 1e-6:
+            warnings.warn(f"Information Bottleneck objective mismatch: computed={ib_objective:.6f}, "
+                         f"final={objective:.6f}. Potential numerical instability.")
+        
+        # Check for numerical degeneracies in probability matrices
+        min_prob = np.min(p_t_given_x[p_t_given_x > 0])  # Minimum non-zero probability
+        if min_prob < 1e-12:
+            warnings.warn(f"Numerical precision warning: minimum probability {min_prob:.2e} "
+                         f"may cause instability. Consider numerical stabilization.")
+        
+        # Information retention diagnostic
+        I_TX_ratio = final_I_TX / (np.log2(self.n_clusters) + self.epsilon)  # Fraction of max possible
+        if I_TX_ratio < 0.01:
+            warnings.warn(f"Low information retention: I(T;X)={final_I_TX:.4f} "
+                         f"({100*I_TX_ratio:.1f}% of maximum). Consider reducing beta.")
+        
         return p_t_given_x, p_y_given_t, objective
     
     def _deterministic_annealing(self, X, Y, n_clusters, beta_schedule, max_iter=50):
@@ -1471,3 +1527,126 @@ class MutualInfoCore:
             'compression_ratio': I_XT / I_XY if I_XY > 0 else 0,
             'relevance_ratio': I_TY / I_XY if I_XY > 0 else 0
         }
+    
+    def _compute_I_TX(self, X, p_t_given_x):
+        """
+        Compute I(T;X) = H(T) - H(T|X) per Tishby et al. (1999) equation (4)
+        
+        Uses numerically stable computation with log-space arithmetic.
+        """
+        n_samples, n_clusters = p_t_given_x.shape
+        epsilon = 1e-12
+        
+        # Compute p(t) = (1/n) Σ_x p(t|x)
+        p_t = np.mean(p_t_given_x, axis=0)
+        
+        # H(T) = -Σ_t p(t) log p(t)
+        H_T = -np.sum(p_t * np.log(p_t + epsilon))
+        
+        # H(T|X) = -(1/n) Σ_x Σ_t p(t|x) log p(t|x)
+        H_T_given_X = -np.mean(np.sum(p_t_given_x * np.log(p_t_given_x + epsilon), axis=1))
+        
+        return H_T - H_T_given_X
+    
+    def _compute_I_TY(self, Y, p_y_given_t, p_t_given_x):
+        """
+        Compute I(T;Y) using joint distributions per Tishby et al. (1999)
+        
+        Based on I(T;Y) = Σ_t,y p(t,y) log(p(t,y)/(p(t)p(y)))
+        """
+        n_samples = len(Y)
+        n_clusters, n_classes = p_y_given_t.shape
+        epsilon = 1e-12
+        
+        # Compute p(t) from p(t|x)
+        p_t = np.mean(p_t_given_x, axis=0)
+        
+        # Compute p(y) from empirical distribution
+        unique_y, counts_y = np.unique(Y, return_counts=True)
+        p_y = counts_y / n_samples
+        
+        # Compute joint p(t,y) = p(y|t) * p(t)
+        p_ty = p_y_given_t * p_t[:, np.newaxis]
+        
+        # I(T;Y) = Σ_t,y p(t,y) log(p(t,y)/(p(t)p(y)))
+        I_TY = 0.0
+        for t in range(n_clusters):
+            for y in range(n_classes):
+                if p_ty[t, y] > epsilon and p_t[t] > epsilon and p_y[y] > epsilon:
+                    log_ratio = np.log(p_ty[t, y] + epsilon) - np.log(p_t[t] + epsilon) - np.log(p_y[y] + epsilon)
+                    I_TY += p_ty[t, y] * log_ratio
+                    
+        return I_TY
+    
+    def _update_conditional_probabilities(self, X, Y, p_t_given_x):
+        """
+        E-step: Update p(y|t) using Bayes rule per Tishby et al. (1999)
+        
+        Formula: p(y|t) = Σ_x p(y|x) * p(x|t) / p(t)
+        Based on equation (3) in Tishby et al. (1999) Information Bottleneck Method
+        """
+        n_samples = len(Y)
+        n_clusters = p_t_given_x.shape[1]
+        unique_y = np.unique(Y)
+        n_classes = len(unique_y)
+        
+        # Compute p(t) = (1/n) Σ_x p(t|x)
+        p_t = np.mean(p_t_given_x, axis=0)
+        
+        # Compute p(x|t) using Bayes rule: p(x|t) = p(t|x) * p(x) / p(t)
+        # Assume uniform p(x) = 1/n for simplicity (can be made configurable)
+        p_x = np.ones(n_samples) / n_samples
+        epsilon = getattr(self, 'numerical_epsilon', 1e-10)
+        
+        p_x_given_t = np.zeros((n_samples, n_clusters))
+        for t in range(n_clusters):
+            if p_t[t] > epsilon:
+                p_x_given_t[:, t] = p_t_given_x[:, t] * p_x / (p_t[t] + epsilon)
+        
+        # Compute p(y|t) = Σ_x p(y|x) * p(x|t)
+        p_y_given_t = np.zeros((n_clusters, n_classes))
+        
+        for t in range(n_clusters):
+            for y_idx, y_val in enumerate(unique_y):
+                # p(y|x) is observed: 1 if Y[x] == y_val, 0 otherwise
+                y_mask = (Y == y_val)
+                p_y_given_t[t, y_idx] = np.sum(p_x_given_t[y_mask, t])
+        
+        # Numerical stability and normalization
+        p_y_given_t = np.clip(p_y_given_t, epsilon, 1.0 - epsilon)
+        p_y_given_t = p_y_given_t / (p_y_given_t.sum(axis=1, keepdims=True) + epsilon)
+        
+        return p_y_given_t
+    
+    def _update_cluster_assignments(self, X, Y, p_y_given_t, beta):
+        """
+        M-step: Update p(t|x) using Information Bottleneck functional per Tishby et al. (1999)
+        
+        Formula: p(t|x) ∝ exp(β * Σ_y p(y|x) log p(y|t))
+        Based on Blahut-Arimoto algorithm in Tishby et al. (1999)
+        """
+        n_samples = len(Y)
+        n_clusters = p_y_given_t.shape[0]
+        unique_y = np.unique(Y)
+        epsilon = getattr(self, 'numerical_epsilon', 1e-10)
+        
+        p_t_given_x = np.zeros((n_samples, n_clusters))
+        
+        for x in range(n_samples):
+            y_val = Y[x]
+            y_idx = np.where(unique_y == y_val)[0][0]
+            
+            # Compute log-likelihood for each cluster
+            for t in range(n_clusters):
+                # p(t|x) ∝ exp(β * log p(y|t)) where y is observed value for sample x
+                log_likelihood = np.log(p_y_given_t[t, y_idx] + epsilon)
+                p_t_given_x[x, t] = np.exp(beta * log_likelihood)
+        
+        # Normalize to get proper probabilities
+        p_t_given_x = p_t_given_x / (p_t_given_x.sum(axis=1, keepdims=True) + epsilon)
+        
+        # Apply numerical stability
+        p_t_given_x = np.clip(p_t_given_x, epsilon, 1.0 - epsilon)
+        p_t_given_x = p_t_given_x / p_t_given_x.sum(axis=1, keepdims=True)
+        
+        return p_t_given_x

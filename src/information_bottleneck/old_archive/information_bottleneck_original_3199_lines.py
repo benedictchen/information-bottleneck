@@ -14,7 +14,7 @@
 #      ```python
 #      def information_bottleneck_objective(self, X: np.ndarray, Y: np.ndarray, T: np.ndarray, 
 #                                          beta: float) -> Tuple[float, float, float]:
-#          """Compute Tishby's exact IB objective: L = I(T;X) - βI(T;Y)"""
+#          '''Compute Tishby's exact IB objective: L = I(T;X) - βI(T;Y)'''
 #          # Compute mutual information terms
 #          I_TX = self.mutual_information_ksg(T, X)  # Compression term
 #          I_TY = self.mutual_information_ksg(T, Y)  # Relevance term
