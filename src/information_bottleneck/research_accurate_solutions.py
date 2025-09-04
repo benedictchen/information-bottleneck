@@ -18,7 +18,8 @@ Support his work: 🍺 Buy him a beer: https://www.paypal.com/cgi-bin/webscr?cmd
 
 import numpy as np
 import warnings
-from typing import Tuple, Optional, Dict, Any, Union, Literal
+import matplotlib.pyplot as plt
+from typing import Tuple, Optional, Dict, Any, Union, Literal, List
 from dataclasses import dataclass
 from enum import Enum
 from scipy.special import logsumexp
@@ -420,6 +421,194 @@ def create_ib_solver(performance_profile: Literal["fast", "accurate", "memory_ef
     return ResearchAccurateInformationBottleneck(config)
 
 
+class TishbyInformationBottleneck:
+    """
+    Research-accurate implementation of Tishby's Information Bottleneck objective function.
+    
+    Based on: Tishby, Pereira & Bialek (2000) "The Information Bottleneck Method"
+    Implements: L = I(T;X) - βI(T;Y) with proper β annealing schedules
+    """
+    
+    def __init__(self, use_ksg_estimator: bool = True):
+        """
+        Initialize Tishby IB with configurable MI estimation.
+        
+        Args:
+            use_ksg_estimator: Use KSG estimator for continuous variables
+        """
+        self.use_ksg_estimator = use_ksg_estimator
+        
+    def information_bottleneck_objective(
+        self, 
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        T: np.ndarray,
+        beta: float
+    ) -> Tuple[float, float, float]:
+        """
+        Compute Tishby's exact IB objective: L = I(T;X) - βI(T;Y)
+        
+        Args:
+            X: Input variable
+            Y: Output variable  
+            T: Bottleneck variable
+            beta: Trade-off parameter
+            
+        Returns:
+            Tuple of (ib_objective, I_TX, I_TY)
+        """
+        # Import here to avoid circular dependencies
+        from .utils.math_utils import compute_mutual_information_ksg, compute_mutual_information_discrete
+        
+        if self.use_ksg_estimator and X.ndim > 1:
+            # Use KSG estimator for continuous variables
+            I_TX = compute_mutual_information_ksg(T, X)
+            I_TY = compute_mutual_information_ksg(T, Y)
+        else:
+            # Use discrete estimator
+            I_TX = compute_mutual_information_discrete(np.histogram2d(T.flatten(), X.flatten())[0])
+            I_TY = compute_mutual_information_discrete(np.histogram2d(T.flatten(), Y.flatten())[0])
+        
+        # Tishby's exact objective function: L = I(T;X) - βI(T;Y)
+        ib_objective = I_TX - beta * I_TY
+        
+        return ib_objective, I_TX, I_TY
+    
+    def beta_annealing_schedule(
+        self, 
+        iteration: int, 
+        max_iterations: int,
+        beta_min: float = 0.0, 
+        beta_max: float = 10.0,
+        schedule_type: str = 'exponential'
+    ) -> float:
+        """
+        Implement β annealing schedule for IB optimization.
+        
+        Based on deterministic annealing principles (Rose et al. 1990).
+        
+        Args:
+            iteration: Current iteration
+            max_iterations: Total iterations
+            beta_min: Minimum β value
+            beta_max: Maximum β value
+            schedule_type: Annealing schedule type
+            
+        Returns:
+            Current β value
+        """
+        if max_iterations <= 0:
+            return beta_max
+            
+        progress = min(1.0, iteration / max_iterations)
+        
+        if schedule_type == 'exponential':
+            # Exponential schedule: β(t) = β_min * (β_max/β_min)^t
+            if beta_min <= 0:
+                beta_min = 1e-6  # Avoid log(0)
+            return beta_min * (beta_max / beta_min) ** progress
+            
+        elif schedule_type == 'linear':
+            # Linear schedule: β(t) = β_min + (β_max - β_min) * t
+            return beta_min + (beta_max - beta_min) * progress
+            
+        elif schedule_type == 'sigmoid':
+            # Sigmoid schedule: smooth transition around midpoint
+            sigmoid_value = 1 / (1 + np.exp(-10 * (progress - 0.5)))
+            return beta_min + (beta_max - beta_min) * sigmoid_value
+            
+        elif schedule_type == 'deterministic_annealing':
+            # Rose et al. 1990 deterministic annealing
+            # Start with high temperature (low β), cool down (increase β)
+            temperature = np.exp(-4 * progress)  # Temperature decreases exponentially
+            return beta_max * (1 - temperature) + beta_min * temperature
+            
+        else:
+            raise ValueError(f"Unknown schedule_type: {schedule_type}")
+    
+    def plot_information_curve(
+        self, 
+        I_TX_values: List[float], 
+        I_TY_values: List[float],
+        save_path: Optional[str] = None,
+        show_plot: bool = True
+    ) -> None:
+        """
+        Plot information plane: I(T;Y) vs I(T;X).
+        
+        This is the famous information bottleneck trade-off curve from Tishby's paper.
+        
+        Args:
+            I_TX_values: Compression values I(T;X)
+            I_TY_values: Relevance values I(T;Y)
+            save_path: Path to save plot (optional)
+            show_plot: Whether to display plot
+        """
+        plt.figure(figsize=(10, 6))
+        plt.plot(I_TX_values, I_TY_values, 'b-', linewidth=2, 
+                label='Information Bottleneck Curve', marker='o', markersize=4)
+        
+        # Add arrow to show direction of β increase
+        if len(I_TX_values) >= 2:
+            mid_idx = len(I_TX_values) // 2
+            dx = I_TX_values[mid_idx + 1] - I_TX_values[mid_idx]
+            dy = I_TY_values[mid_idx + 1] - I_TY_values[mid_idx]
+            plt.arrow(I_TX_values[mid_idx], I_TY_values[mid_idx], dx*0.3, dy*0.3,
+                     head_width=0.02, head_length=0.02, fc='red', ec='red')
+            plt.text(I_TX_values[mid_idx] + dx*0.5, I_TY_values[mid_idx] + dy*0.5,
+                    'β increases', fontsize=10, color='red')
+        
+        plt.xlabel('I(T;X) - Compression', fontsize=12)
+        plt.ylabel('I(T;Y) - Relevance', fontsize=12) 
+        plt.title('Information Bottleneck Trade-off Curve\n(Tishby, Pereira & Bialek, 2000)', fontsize=14)
+        plt.grid(True, alpha=0.3)
+        plt.legend(fontsize=11)
+        
+        # Add theoretical bounds
+        if I_TX_values and I_TY_values:
+            plt.xlim(0, max(I_TX_values) * 1.1)
+            plt.ylim(0, max(I_TY_values) * 1.1)
+        
+        if save_path:
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            
+        if show_plot:
+            plt.show()
+        else:
+            plt.close()
+    
+    def compute_information_curve(
+        self,
+        X: np.ndarray,
+        Y: np.ndarray,
+        T_sequence: List[np.ndarray],
+        beta_sequence: Optional[List[float]] = None
+    ) -> Tuple[List[float], List[float], List[float]]:
+        """
+        Compute information curve for sequence of bottleneck representations.
+        
+        Args:
+            X: Input data
+            Y: Target data
+            T_sequence: Sequence of bottleneck representations
+            beta_sequence: Corresponding β values (optional)
+            
+        Returns:
+            Tuple of (I_TX_values, I_TY_values, beta_values)
+        """
+        I_TX_values = []
+        I_TY_values = []
+        beta_values = beta_sequence or list(range(len(T_sequence)))
+        
+        for i, T in enumerate(T_sequence):
+            beta = beta_values[i] if i < len(beta_values) else 1.0
+            _, I_TX, I_TY = self.information_bottleneck_objective(X, Y, T, beta)
+            I_TX_values.append(I_TX)
+            I_TY_values.append(I_TY)
+        
+        return I_TX_values, I_TY_values, beta_values
+
+
 # Export main components for easy use
 __all__ = [
     'ResearchAccurateInformationBottleneck',
@@ -428,5 +617,6 @@ __all__ = [
     'NumericalStability',
     'InitializationStrategy',
     'ConvergenceMethod',
+    'TishbyInformationBottleneck',
     'create_ib_solver'
 ]

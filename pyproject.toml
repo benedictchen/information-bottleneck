@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "information-bottleneck"
-version = "1.2.1"
+version = "1.2.2"
 description = "Optimal compression-prediction tradeoffs for principled feature extraction"
-readme = "README.md"
+# readme = "README.md"  # Temporarily disabled
 license = {text = "Custom Non-Commercial License with Donation Requirements"}
 authors = [
     {name = "Benedict Chen", email = "benedict@benedictchen.com"},
