@@ -227,4 +227,3 @@ def test_ib_optimizer_with_constraints():
 if __name__ == "__main__":
     test_ib_optimizer_import()
     test_ib_optimizer_creation()
-    print("✅ IB Optimizer tests completed!")

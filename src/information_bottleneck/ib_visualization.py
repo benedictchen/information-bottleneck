@@ -1,4 +1,30 @@
 """
+🎨 Ib Visualization
+====================
+
+🎯 ELI5 Summary:
+This is like an artist's palette for our data! Just like how artists use different 
+colors and brushes to paint pictures that help people understand their ideas, this file 
+creates charts, graphs, and visual displays that help researchers see and understand 
+what their algorithms are doing.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+📋 Component Integration:
+========================
+    ┌──────────┐
+    │   This   │
+    │Component │ ←→ Other Components
+    └──────────┘
+         ↑↓
+    System Integration
+
+"""
+"""
 Visualization tools for Information Bottleneck analysis
 Based on: Tishby, Pereira & Bialek (1999) "The Information Bottleneck Method"
 """
@@ -149,7 +175,7 @@ class IBVisualization:
             'objective': objective_values
         }
         
-        print(f"✅ Information curve computed!")
+        # Removed print spam: f"...
         print(f"   Compression range: [{np.nanmin(compression_values):.3f}, {np.nanmax(compression_values):.3f}] bits")
         print(f"   Relevance range: [{np.nanmin(relevance_values):.3f}, {np.nanmax(relevance_values):.3f}] bits")
         
@@ -522,7 +548,7 @@ Compression Ratio: {X.shape[1]/total_clusters:.1f}x
         plt.tight_layout()
         plt.show()
         
-        print("📊 Method comparison plotted!")
-        print("📈 Best compression:", methods[np.argmin(compressions)])
-        print("🎯 Best relevance:", methods[np.argmax(relevances)])
+        # Removed print spam: "...
+        # Removed print spam: "...])
+        # Removed print spam: "...])
         print("⚖️ Best objective:", methods[np.argmin(objectives)])

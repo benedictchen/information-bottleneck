@@ -559,4 +559,3 @@ if __name__ == "__main__":
     test_neural_information_bottleneck_init_with_pytorch()
     test_information_bottleneck_init() 
     test_information_bottleneck_mutual_info_estimators()
-    print("✅ Information Bottleneck Original comprehensive tests completed!")

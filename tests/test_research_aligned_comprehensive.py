@@ -95,7 +95,6 @@ class TestResearchFoundation:
         
         # Verify basic rate-distortion tradeoff exists
         assert hasattr(ib, 'fit'), "IB should have fit method for rate-distortion optimization"
-        print("✅ Rate-Distortion Theory compliance verified")
     
     def test_mutual_information_computation(self):
         """
@@ -143,7 +142,6 @@ class TestNeuralInformationBottleneck:
         assert neural_ib.encoder_dims == [10, 8, 4], "Encoder dims should match input"
         assert neural_ib.decoder_dims == [4, 6, 3], "Decoder dims should match specification"
         assert neural_ib.latent_dim == 4, "Latent dimension should match bottleneck"
-        print("✅ Neural IB architecture correctly initialized")
     
     def test_information_plane_analysis(self):
         """
@@ -167,7 +165,6 @@ class TestNeuralInformationBottleneck:
         
         # Information plane should show compression and generalization phases
         assert hasattr(neural_ib, 'fit'), "Neural IB should have training capability"
-        print("✅ Information plane analysis structure verified")
 
 
 class TestPracticalImplementation:
@@ -236,7 +233,6 @@ class TestPracticalImplementation:
         assert hasattr(ib, 'beta') or hasattr(config, 'beta'), "Beta parameter should be accessible"
         assert config.max_iter == 100, "Max iterations should be preserved"
         assert config.tolerance == 1e-6, "Tolerance should be preserved"
-        print("✅ All configuration options preserved")
     
     def test_research_paper_examples(self):
         """
@@ -293,7 +289,6 @@ class TestEdgeCasesAndRobustness:
         
         # Either works or raises appropriate error
         assert isinstance(result, bool), "Should handle minimal data gracefully"
-        print("✅ Edge case handling verified")
     
     def test_high_dimensional_data(self):
         """Test performance with high-dimensional data"""
@@ -313,7 +308,6 @@ class TestEdgeCasesAndRobustness:
         
         # Should either work or fail gracefully
         assert isinstance(high_dim_success, bool), "High-dimensional data should be handled"
-        print("✅ High-dimensional data handling verified")
 
 
 class TestMathematicalAccuracy:
@@ -359,7 +353,6 @@ class TestMathematicalAccuracy:
         
         # Either tracks convergence or runs fixed iterations
         assert isinstance(converged, bool), "Convergence tracking should exist"
-        print("✅ Convergence properties validated")
 
 
 # Performance benchmarks (optional, for research validation)

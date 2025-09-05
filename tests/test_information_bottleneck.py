@@ -368,7 +368,6 @@ if __name__ == "__main__":
     # Quick smoke tests
     try:
         test_module_integration()
-        print("✅ Module integration test passed")
         
         # Run core functionality test
         np.random.seed(42)

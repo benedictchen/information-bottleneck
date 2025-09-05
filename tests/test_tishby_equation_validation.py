@@ -292,7 +292,6 @@ class TestTishbyEquationValidation:
                     print(f"β={beta_low}: I(Z;Y)={results[beta_low]['I_ZY']:.3f}")
                     print(f"β={beta_high}: I(Z;Y)={results[beta_high]['I_ZY']:.3f}")
         
-        print("✅ Beta parameter trade-off validation completed")
 
     def test_configuration_preservation(self, synthetic_data):
         """
@@ -336,7 +335,6 @@ class TestTishbyEquationValidation:
             assert hasattr(ib, 'max_iter')
             assert hasattr(ib, 'tolerance')
             
-            print("✅ All configuration options preserved and functional")
             
         except Exception as e:
             pytest.fail(f"Configuration preservation test failed: {e}")
@@ -376,7 +374,6 @@ class TestTishbyEquationValidation:
                             assert point['I_XZ'] >= 0, "I(X;Z) must be non-negative"
                             assert point['I_ZY'] >= 0, "I(Z;Y) must be non-negative"
             
-            print("✅ Information plane trajectory validation passed")
             
         except Exception as e:
             warnings.warn(f"Information plane test skipped: {e}")
@@ -418,7 +415,6 @@ class TestCompatibilityPreservation:
             assert Z is not None, "Transform should return result"
             assert len(Z) == len(X), "Transform should preserve sample count"
             
-            print("✅ Full API compatibility preserved")
             
         except Exception as e:
             pytest.fail(f"API compatibility test failed: {e}")

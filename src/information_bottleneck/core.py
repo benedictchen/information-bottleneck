@@ -1,4 +1,78 @@
 """
+🧠 Information Bottleneck - Core Module
+========================================
+
+🎯 ELI5 EXPLANATION:
+==================
+Imagine your brain trying to understand a movie while being bombarded with millions of details!
+
+Your brain is incredibly smart - it doesn't try to remember every single pixel or sound wave. Instead, it finds the perfect "compression" that keeps all the important stuff (the plot, characters, emotions) while throwing away useless details (background noise, lighting fluctuations).
+
+The Information Bottleneck principle does exactly this for AI:
+1. 📥 **Input**: Complex, noisy data (images, text, sensors)
+2. 🎯 **Bottleneck**: Find the minimal representation that preserves what matters
+3. 📤 **Output**: Perfect predictions using only essential information
+4. 🧠 **Magic**: Discovers the same information processing principles your brain uses!
+
+🔬 RESEARCH FOUNDATION:
+======================
+Implements Naftali Tishby's revolutionary information-theoretic learning principle:
+- Tishby, Pereira & Bialek (1999): "The Information Bottleneck Method"
+- Tishby & Zaslavsky (2015): "Deep Learning and the Information Bottleneck Principle"  
+- Alemi et al. (2017): "Deep Variational Information Bottleneck"
+- Schwartz-Ziv & Tishby (2017): "Opening the Black Box of Deep Neural Networks"
+
+🧮 MATHEMATICAL PRINCIPLES:
+==========================
+**Core Principle - Optimal Information Trade-off:**
+L_IB = I(X;Z) - βI(Z;Y)
+
+Where:
+• I(X;Z) = Compression term (minimize information about input)
+• I(Z;Y) = Prediction term (maximize relevant information about output)
+• β = Lagrange multiplier controlling the trade-off
+• Z = Compressed representation (the "bottleneck")
+
+**Information Measures:**
+I(X;Y) = ∫∫ p(x,y) log[p(x,y)/(p(x)p(y))] dx dy
+
+**Deterministic Annealing Schedule:**
+β(t) = β_min × (β_max/β_min)^(t/T)
+
+📊 ARCHITECTURE VISUALIZATION:
+==============================
+```
+🔬 INFORMATION BOTTLENECK PRINCIPLE 🔬
+
+High-Dimensional Input     Information Bottleneck      Optimal Predictions
+┌─────────────────────┐    ┌─────────────────────────┐  ┌───────────────────┐
+│  🌍 Raw Input X     │    │    🎯 BOTTLENECK Z      │  │  ✨ Predictions Y │
+│                     │    │                         │  │                   │
+│  📸 Images: 1M dims │───→│  🧠 Compress to ~100    │─→│  🏷️ Classes: 10   │
+│  📝 Text: 10K words │    │                         │  │                   │
+│  🔊 Audio: 100K Hz  │    │   I(X;Z) ← minimize     │  │   I(Z;Y) ← maximize │
+│  🎥 Video: 1B pixels│    │   (Remove noise)        │  │   (Keep signal)   │
+└─────────────────────┘    └─────────────────────────┘  └───────────────────┘
+         ↓                            ↓                           ↓
+    Noisy, complex              Perfect balance            Optimal decisions
+    redundant data              compression ↔ prediction    using minimal info
+
+🔄 LEARNING DYNAMICS:
+   β → 0:  Z ≈ X (no compression, overfitting)
+   β → ∞:  Z ≈ constant (too much compression, underfitting)  
+   β* optimal: Z contains exactly the right information for Y
+```
+
+💰 SUPPORT THIS RESEARCH - PLEASE DONATE! 💰
+
+🙏 If this library helps your research or project, please consider supporting:
+💳 PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+⭐ GitHub Sponsors: https://github.com/sponsors/benedictchen
+
+Your support enables cutting-edge AI research for everyone! 🚀
+
+"""
+"""
 Information Bottleneck Core Classes - Refactored for 800-line limit
 =================================================================
 

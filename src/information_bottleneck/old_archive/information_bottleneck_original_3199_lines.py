@@ -492,7 +492,6 @@ class NeuralInformationBottleneck:
             self.decoder_weights.append(weight)
             self.decoder_biases.append(bias)
             
-        print("✅ NumPy neural networks initialized")
         
     def _numpy_relu(self, x):
         """ReLU activation function"""
@@ -622,7 +621,6 @@ class NeuralInformationBottleneck:
             if (epoch + 1) % 20 == 0:
                 print(f"   Epoch {epoch+1}: Total={total_loss:.4f}, Recon={reconstruction_loss:.4f}, KL={kl_loss:.4f}")
         
-        print("✅ Neural Information Bottleneck training complete!")
         
     def _fit_numpy(self, X: np.ndarray, Y: np.ndarray, epochs: int, lr: float):
         """NumPy-based training with gradient descent"""
@@ -741,7 +739,6 @@ class NeuralInformationBottleneck:
             if (epoch + 1) % 20 == 0:
                 print(f"   Epoch {epoch+1}: Total={total_loss:.4f}, Recon={reconstruction_loss:.4f}, KL={kl_loss:.4f}")
                 
-        print("✅ NumPy Information Bottleneck training complete!")
         
     def transform(self, X: np.ndarray) -> np.ndarray:
         """Transform data to latent representation"""

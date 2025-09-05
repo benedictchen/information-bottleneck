@@ -32,4 +32,3 @@ def test_demo_can_run():
 
 if __name__ == "__main__":
     test_demo_can_run()
-    print("✅ Demo test passed")

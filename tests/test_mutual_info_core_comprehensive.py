@@ -356,4 +356,3 @@ if __name__ == "__main__":
     test_mutual_info_core_init()
     test_estimate_mutual_info_discrete()
     test_ksg_estimator()
-    print("✅ Mutual Info Core comprehensive tests completed!")

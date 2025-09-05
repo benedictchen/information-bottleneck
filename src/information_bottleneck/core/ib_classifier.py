@@ -1,11 +1,77 @@
 """
-📊 Information Bottleneck Classifier
-===================================
+🔍 Information Bottleneck Classifier - Smart Feature Learning System
+===================================================================
 
-Classification wrapper using Information Bottleneck for
-optimal feature extraction and prediction.
+🎯 ELI5 EXPLANATION:
+==================
+Think of the Information Bottleneck Classifier like a brilliant detective who solves cases by focusing only on the most important clues!
+
+Imagine you're a detective with thousands of pieces of evidence for a case. Most evidence is noise, but some clues are golden - they tell you everything you need to know to solve the case perfectly. The Information Bottleneck Classifier is like having the world's best detective who:
+
+1. 🔍 **Evidence Filtering**: Looks at all available information about your data
+2. 🎯 **Clue Selection**: Finds the absolute minimum information needed for perfect classification
+3. 🧠 **Smart Compression**: Throws away irrelevant noise, keeps only what matters
+4. ⚖️  **Perfect Balance**: Maximum accuracy with minimal information complexity!
+
+Just like a detective who can solve any case with just the right clues, this classifier finds the perfect "information bottleneck" - the smallest set of features that still gives perfect predictions!
+
+🔬 RESEARCH FOUNDATION:
+======================
+Core information theory from computational learning pioneers:
+- **Tishby et al. (2000)**: "The information bottleneck method" - Original breakthrough theory
+- **Alemi et al. (2016)**: "Deep variational information bottleneck" - Neural network extensions
+- **Shwartz-Ziv & Tishby (2017)**: "Opening the black box of deep neural networks" - DNN analysis
+- **Kolchinsky et al. (2019)**: "Nonlinear information bottleneck" - Advanced formulations
+
+🧮 MATHEMATICAL PRINCIPLES:
+==========================
+**Core Information Bottleneck Principle:**
+min I(X,T) - βI(T,Y)
+
+**Classification Objective:**
+Find representation T that minimizes input complexity I(X,T) 
+while maximizing predictive power I(T,Y)
+
+**Optimal Trade-off:**
+β parameter controls compression-prediction balance
+β → 0: Maximum compression (lose all information)
+β → ∞: No compression (keep everything)
+
+📊 IB CLASSIFIER ARCHITECTURE VISUALIZATION:
+==========================================
+```
+🔍 INFORMATION BOTTLENECK CLASSIFIER 🔍
+
+Raw Features               Information Bottleneck            Perfect Classification
+┌─────────────────┐       ┌──────────────────────────────┐   ┌─────────────────┐
+│ 📊 Input X      │       │                              │   │ 🎯 PREDICTIONS  │
+│ [1000 features] │ ───→  │  🔍 BOTTLENECK T:            │ → │ Class A: 95%    │
+│ Noisy, complex  │       │  • Compress: min I(X,T)     │   │ Class B: 5%     │
+└─────────────────┘       │  • Preserve: max I(T,Y)     │   │                 │
+                          │                              │   │ 🎲 CERTAINTY    │
+┌─────────────────┐       │  ⚖️  TRADE-OFF PARAMETER β:  │   │ High confidence │
+│ 🏷️ Labels Y      │ ───→  │  Controls compression level  │   │ Low entropy     │
+│ [Class labels]  │       │                              │   │                 │
+└─────────────────┘       │  🧠 LEARNING METHODS:        │   │ 🔬 EFFICIENCY   │
+                          │  • Classical IB clustering   │   │ Minimal info    │
+┌─────────────────┐       │  • Neural network variational│   │ Maximum accuracy│
+│ 🎛️ Hyperparams   │ ───→  │  • Optimal representation   │   │                 │
+│ β, clusters, etc│       │                              │   │ ✨ GENERALIZE   │
+└─────────────────┘       └──────────────────────────────┘   │ Robust to noise │
+                                         │                    │ Finds true      │
+                                         ▼                    │ patterns        │
+                              RESULT: Optimal information     └─────────────────┘
+                                     compression for ML! 🚀
+```
+
+💰 SUPPORT THIS RESEARCH:
+=========================
+🙏 If this library helps your research:
+💳 PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+💖 GitHub Sponsors: https://github.com/sponsors/benedictchen
 
 Author: Benedict Chen (benedict@benedictchen.com)
+Based on: Naftali Tishby's foundational information bottleneck theory
 """
 
 import numpy as np

@@ -1,9 +1,73 @@
 """
-📊 Mutual Information Estimation Core
-====================================
+📊 Mutual Information Estimation - Information Theory Core
+=========================================================
 
-Core mutual information estimation algorithms for
-Information Bottleneck calculations.
+🎯 ELI5 EXPLANATION:
+==================
+Think of mutual information like measuring how much knowing X helps you predict Y!
+
+Imagine you're trying to guess someone's weight (Y) by looking at their height (X):
+1. 📏 **Independent**: If height tells you nothing about weight, I(Height;Weight) = 0
+2. 📊 **Correlated**: If tall people tend to be heavier, I(Height;Weight) > 0  
+3. 🎯 **Perfect Prediction**: If weight = 2×height, then I(Height;Weight) = very high!
+
+Mutual information measures this "predictive power" in bits - how many yes/no questions 
+you save by knowing X when trying to figure out Y.
+
+🔬 RESEARCH FOUNDATION:
+======================
+Core information theory algorithms based on:
+- Shannon (1948): "A Mathematical Theory of Communication" - Original MI definition
+- Kraskov, Grassberger & Stögbauer (2004): "Estimating mutual information" - KSG estimator
+- Kozachenko & Leonenko (1987): "Sample estimate of entropy of random vector" - k-NN entropy
+- Tishby et al. (1999): "The Information Bottleneck Method" - IB applications
+
+🧮 MATHEMATICAL PRINCIPLES:
+==========================
+**Mutual Information Definition:**
+I(X;Y) = ∫∫ p(x,y) log(p(x,y)/(p(x)p(y))) dx dy
+
+**Key Properties:**
+• I(X;Y) ≥ 0 (always non-negative)
+• I(X;Y) = I(Y;X) (symmetric)  
+• I(X;Y) = H(X) - H(X|Y) (information gain)
+• I(X;Y) = H(X) + H(Y) - H(X,Y) (entropy decomposition)
+
+📊 ESTIMATION METHODS VISUALIZATION:
+===================================
+```
+📊 MUTUAL INFORMATION ESTIMATION TOOLBOX 📊
+
+Input Data: X, Y                    Estimation Methods
+┌─────────────────┐                ┌─────────────────────────────┐
+│ X: [1,2,3,4,5]  │                │  🎯 KSG ESTIMATOR           │
+│ Y: [2,4,6,8,10] │ ──────────────→│  k-NN based, continuous     │
+│                 │                │  Best for: High-dim data    │
+└─────────────────┘                │                             │
+                                   │  📊 BINNING ESTIMATOR       │
+                                   │  Histogram-based, discrete  │
+                                   │  Best for: Discrete/mixed   │
+                                   │                             │
+                                   │  🌊 KERNEL DENSITY         │
+                                   │  Smooth density estimation  │
+                                   │  Best for: Smooth data      │
+                                   └─────────────────────────────┘
+                                                │
+                                                ▼
+                                   ┌─────────────────────────────┐
+                                   │     I(X;Y) = 2.32 bits     │
+                                   │                             │
+                                   │  Interpretation:            │
+                                   │  "Knowing X saves 2.32 bits │
+                                   │   when predicting Y"        │
+                                   └─────────────────────────────┘
+```
+
+💰 SUPPORT THIS RESEARCH:
+=========================
+🙏 If this library helps your research:
+💳 PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS
+💖 GitHub Sponsors: https://github.com/sponsors/benedictchen
 
 Author: Benedict Chen (benedict@benedictchen.com)
 """

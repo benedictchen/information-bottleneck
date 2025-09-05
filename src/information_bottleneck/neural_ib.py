@@ -1,4 +1,29 @@
 """
+📋 Neural Ib
+=============
+
+🎯 ELI5 Summary:
+This file is an important component in our AI research system! Like different organs 
+in your body that work together to keep you healthy, this file has a specific job that 
+helps the overall algorithm work correctly and efficiently.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+📋 Component Integration:
+========================
+    ┌──────────┐
+    │   This   │
+    │Component │ ←→ Other Components
+    └──────────┘
+         ↑↓
+    System Integration
+
+"""
+"""
 Neural Information Bottleneck implementation
 Based on: Tishby, Pereira & Bialek (1999) with neural network parameterization
 """
@@ -90,7 +115,7 @@ class NeuralInformationBottleneck:
         
         self.decoder = self.nn.Sequential(*decoder_layers)
         
-        print(f"📊 Network Architecture:")
+        # Removed print spam: f"...
         print(f"   Encoder: {self.encoder}")
         print(f"   Decoder: {self.decoder}")
     
@@ -128,7 +153,7 @@ class NeuralInformationBottleneck:
             self.decoder_weights.append(W)
             self.decoder_biases.append(b)
         
-        print("🔧 NumPy-based networks initialized")
+        # Removed print spam: "...
     
     def _numpy_relu(self, x):
         """ReLU activation function"""

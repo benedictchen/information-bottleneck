@@ -1,4 +1,21 @@
 """
+⚙️ Mi Estimation Config
+========================
+
+🎯 ELI5 Summary:
+Think of this like a control panel for our algorithm! Just like how your TV remote 
+has different buttons for volume, channels, and brightness, this file has all the settings 
+that control how our AI algorithm behaves. Researchers can adjust these settings to get 
+the best results for their specific problem.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+"""
+"""
 🔬 Mutual Information Estimation Configuration System
 ===================================================
 
@@ -364,11 +381,11 @@ class MIEstimationConfig:
 # FACTORY FUNCTIONS FOR COMMON CONFIGURATIONS
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def create_research_accurate_config() -> MIEstimationConfig:
+def create_accurate_config() -> MIEstimationConfig:
     """
-    Create configuration that prioritizes research accuracy over speed
+    Create configuration that prioritizes accuracy over speed
     
-    Uses the most theoretically sound methods with proper parameter settings
+    Uses theoretically sound methods with proper parameter settings
     """
     return MIEstimationConfig(
         method=MIEstimationMethod.KSG_EFFICIENT,

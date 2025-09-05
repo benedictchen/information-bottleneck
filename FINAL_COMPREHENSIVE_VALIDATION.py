@@ -7,7 +7,7 @@
 def test_all_packages():
     results = {}
     
-    print("🎯 FINAL COMPREHENSIVE VALIDATION")
+    # Removed print spam: "...
     print("=" * 50)
     
     # Test each package in its own directory
@@ -49,12 +49,12 @@ def test_all_packages():
                 # Test with both parameter styles
                 try:
                     tpb1 = pkg_module.TensorProductBinding(role_dimension=8, filler_dimension=8)
-                    print("✅ Works with role_dimension/filler_dimension")
+                    # # Removed print spam: "...
                     results[pkg] = 'REAL'
                 except Exception:
                     try:
                         tpb2 = pkg_module.TensorProductBinding(vector_dim=10)
-                        print("✅ Works with vector_dim (compatibility)")  
+                        # # Removed print spam: "...")  
                         results[pkg] = 'REAL'
                     except Exception as e2:
                         print(f"❌ Both parameter styles failed")
@@ -64,7 +64,7 @@ def test_all_packages():
                 ib = pkg_module.InformationBottleneck()
                 methods = [m for m in dir(ib) if not m.startswith('_')]
                 if len(methods) > 15 and hasattr(ib, 'analyze_clusters'):
-                    print(f"✅ {len(methods)} methods, real implementation")
+                    # Removed print spam: f"...} methods, real implementation")
                     results[pkg] = 'REAL'
                 else:
                     print(f"❌ Limited methods: {len(methods)}")
@@ -74,7 +74,7 @@ def test_all_packages():
                 ilp = pkg_module.InductiveLogicProgrammer() 
                 foil = pkg_module.FOILLearner()
                 progol = pkg_module.ProgolSystem()
-                print(f"✅ All three classes: ILP, FOIL, Progol")
+                # Removed print spam: f"...
                 results[pkg] = 'REAL'
                 
             else:
@@ -94,10 +94,10 @@ def test_all_packages():
                     main_classes.append('AssociativeMemory')
                     
                 if main_classes:
-                    print(f"✅ Main classes: {', '.join(main_classes)}")
+                    # Removed print spam: f"...}")
                     results[pkg] = 'REAL'
                 else:
-                    print("✅ Package imports successfully")
+                    # # Removed print spam: "...
                     results[pkg] = 'REAL'
                     
         except Exception as e:
@@ -106,7 +106,7 @@ def test_all_packages():
     
     # Final summary
     print("\n" + "=" * 50)
-    print("🎯 FINAL VALIDATION RESULTS")
+    # Removed print spam: "...
     print("=" * 50)
     
     real_count = sum(1 for status in results.values() if status == 'REAL')
@@ -116,12 +116,12 @@ def test_all_packages():
         icon = "✅" if status == 'REAL' else "❌" if status == 'STUB' else "🚫"
         print(f"{icon} {pkg}: {status}")
     
-    print(f"\n🎉 FINAL SUCCESS RATE: {real_count}/{total_count} packages working")
+    # Removed print spam: f"\n...
     
     if real_count == total_count:
-        print("🏆 COMPLETE SUCCESS! All packages fully functional!")
-        print("🎯 The 'migration nightmare' has been completely resolved!")
-        print("🚀 All AI research implementations are now accessible!")
+        # Removed print spam: "...
+        # Removed print spam: "...
+        # # Removed print spam: "...
     
     return results
 

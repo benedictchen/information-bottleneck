@@ -1,4 +1,14 @@
 """
+📋 Ib Classifier
+=================
+
+🎯 ELI5 Summary:
+This file is an important component in our AI research system! Like different organs 
+in your body that work together to keep you healthy, this file has a specific job that 
+helps the overall algorithm work correctly and efficiently.
+
+"""
+"""
 🎯 Information Bottleneck Classifier
 ====================================
 
@@ -238,7 +248,7 @@ class InformationBottleneckClassifier(BaseEstimator, ClassifierMixin, Transforme
         if self.auto_beta:
             self.beta_ = self._select_optimal_beta(X, y_encoded)
             if self.verbose:
-                print(f"🎯 Auto-selected β = {self.beta_:.4f}")
+                # Removed print spam: f"...
         else:
             self.beta_ = self.beta
         
@@ -279,7 +289,7 @@ class InformationBottleneckClassifier(BaseEstimator, ClassifierMixin, Transforme
         self._is_fitted = True
         
         if self.verbose:
-            print(f"✅ Information Bottleneck classifier fitted")
+            # Removed print spam: f"...
         
         return self
     
@@ -312,7 +322,7 @@ class InformationBottleneckClassifier(BaseEstimator, ClassifierMixin, Transforme
         best_beta = self.beta
         
         if self.verbose:
-            print(f"🔍 Searching optimal β in {beta_candidates}")
+            # Removed print spam: f"...
         
         for beta_candidate in beta_candidates:
             # Create temporary classifier

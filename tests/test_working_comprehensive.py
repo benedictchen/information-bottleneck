@@ -159,7 +159,6 @@ class TestActualFunctionality:
             assert hasattr(neural_ib, 'decoder_dims'), "Should have decoder_dims attribute"  
             assert hasattr(neural_ib, 'latent_dim'), "Should have latent_dim attribute"
             
-            print("✅ NeuralInformationBottleneck: Architecture initialized successfully")
             
         except Exception as e:
             print(f"⚠️  NeuralInformationBottleneck: {e}")
@@ -173,7 +172,6 @@ class TestActualFunctionality:
         try:
             config = ib.IBConfig()
             assert hasattr(config, '__class__'), "IBConfig should be a class"
-            print("✅ IBConfig: Available")
         except Exception as e:
             print(f"⚠️  IBConfig: {e}")
         
@@ -181,7 +179,6 @@ class TestActualFunctionality:
         try:
             neural_config = ib.NeuralIBConfig()
             assert hasattr(neural_config, '__class__'), "NeuralIBConfig should be a class"
-            print("✅ NeuralIBConfig: Available")
         except Exception as e:
             print(f"⚠️  NeuralIBConfig: {e}")
         
@@ -189,7 +186,6 @@ class TestActualFunctionality:
         try:
             method = ib.IBMethod
             init_method = ib.InitializationMethod
-            print("✅ Enum classes: IBMethod, InitializationMethod available")
         except Exception as e:
             print(f"⚠️  Enum classes: {e}")
     

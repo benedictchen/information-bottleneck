@@ -11,7 +11,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def demo_advanced_features():
-    print("🚀 Advanced Information Bottleneck Feature Demonstration")
+    # print("🚀 Advanced Information Bottleneck Feature Demonstration")
     print("=" * 60)
     
     # Generate dataset

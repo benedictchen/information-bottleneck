@@ -1,4 +1,31 @@
 """
+🧠 Core Original 1472 Lines
+============================
+
+🎯 ELI5 Summary:
+This is the brain of our operation! Just like how your brain processes information 
+and makes decisions, this file contains the main algorithm that does the mathematical 
+thinking. It takes in data, processes it according to research principles, and produces 
+intelligent results.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+🧠 Core Algorithm Architecture:
+===============================
+    Input → Processing → Output
+      ↓         ↓         ↓
+  [Data]  [Algorithm]  [Result]
+      ↓         ↓         ↓
+     📊        ⚙️        ✨
+     
+Mathematical Foundation → Implementation → Research Application
+
+"""
+"""
 💰 SUPPORT THIS RESEARCH - PLEASE DONATE! 💰
 
 🙏 If this library helps your research or project, please consider donating:
@@ -455,9 +482,75 @@ class TransformPredictMixin:
     
     def transform(self, X):
         """
-        Transform data through the information bottleneck.
+        🔄 Transform data through the information bottleneck - Compress intelligently!
         
-        Maps X → T using learned p(t|x) distributions.
+        🎯 ELI5 EXPLANATION:
+        ==================
+        Think of this like asking our trained librarian to create summaries of new books!
+        
+        After learning the perfect summary system (via fit()), the librarian can now take 
+        any new book (input data X) and create the optimal short summary (compressed 
+        representation T) that preserves exactly what's needed for classification.
+        
+        The magic happens here:
+        • 📖 **Input**: New data X (like a book to summarize)
+        • 🧠 **Processing**: Use learned compression rules p(t|x)
+        • 📋 **Output**: Compressed representation T (the smart summary!)
+        
+        🔬 RESEARCH FOUNDATION:
+        ======================
+        Implements the encoding step of Information Bottleneck theory:
+        T = argmax p(t|x) - maps input to most likely compressed state
+        
+        Based on learned conditional probabilities p(t|x) from fit() phase.
+        This is the "encoder" part of the information bottleneck pipeline.
+        
+        Parameters
+        ----------
+        X : array-like, shape (n_samples,) or (n_samples, n_features)
+            🔢 Input data to compress using learned bottleneck representation.
+            Can be new data not seen during training.
+            
+        Returns
+        -------
+        T : array-like, shape (n_samples,)
+            🎯 Compressed representation as cluster indices.
+            Each value is an integer representing the most likely cluster/state
+            that preserves predictive information about the target Y.
+            
+        Example Usage
+        -------------
+        ```python
+        # 🔄 Transform new data through learned bottleneck
+        import numpy as np
+        from information_bottleneck import InformationBottleneck
+        
+        # Train the bottleneck (from previous fit example)
+        ib = InformationBottleneck(n_clusters=5, beta=1.0)
+        ib.fit(X_train, Y_train)
+        
+        # Transform new data to compressed representation
+        X_new = np.random.randn(100) + np.sin(np.linspace(0, 2*np.pi, 100))
+        T_compressed = ib.transform(X_new)
+        
+        # Removed print spam: f"...
+        # Removed print spam: f"...)} unique states")
+        print(f"📋 Compressed representation: {T_compressed[:10]}")
+        ```
+        
+        ```python
+        # 🧪 Analyze compression quality
+        # Compare information content before/after compression
+        from scipy.stats import entropy
+        
+        # Measure information content
+        original_entropy = entropy(np.histogram(X_new, bins=20)[0] + 1e-10)
+        compressed_entropy = entropy(np.bincount(T_compressed) + 1e-10)
+        
+        compression_ratio = original_entropy / compressed_entropy
+        print(f"🔬 Compression ratio: {compression_ratio:.2f}x")
+        print(f"📉 Information preserved for prediction: {compressed_entropy:.3f} bits")
+        ```
         """
         if not hasattr(self, 'p_t_given_x_'):
             raise ValueError("Model must be fitted before transform")
@@ -484,7 +577,81 @@ class TransformPredictMixin:
         return self.p_y_given_t_[T]
     
     def predict(self, X):
-        """Predict class labels."""
+        """
+        🎯 Predict class labels using information bottleneck - The smart prediction!
+        
+        🎯 ELI5 EXPLANATION:
+        ==================
+        Think of this as our trained librarian making educated guesses about new books!
+        
+        After learning the perfect summary system (fit) and knowing how to compress 
+        (transform), our librarian can now look at a new book, create its optimal 
+        summary, and predict what category it belongs to based on similar summaries 
+        from training.
+        
+        The prediction pipeline:
+        • 📖 **Input**: New data X 
+        • 🔄 **Compress**: X → T (via learned bottleneck)
+        • 🎯 **Predict**: T → Y (using learned p(y|t))
+        • 📊 **Output**: Most likely class labels!
+        
+        🔬 RESEARCH FOUNDATION:
+        ======================
+        Implements the full Information Bottleneck prediction pipeline:
+        1. Encode: X → T using learned p(t|x) 
+        2. Decode: T → Y using learned p(y|t)
+        
+        This is the "decoder" step that converts compressed representations 
+        back to predictions, completing the information bottleneck cycle.
+        
+        Parameters
+        ----------
+        X : array-like, shape (n_samples,) or (n_samples, n_features)
+            🔢 Input data to classify using the learned bottleneck model.
+            
+        Returns
+        -------
+        predictions : array-like, shape (n_samples,)
+            🎯 Predicted class labels as integers.
+            Each value represents the most likely class for the corresponding input.
+            
+        Example Usage
+        -------------
+        ```python
+        # 🎯 Complete Information Bottleneck prediction workflow
+        import numpy as np
+        from information_bottleneck import InformationBottleneck
+        from sklearn.metrics import accuracy_score, classification_report
+        
+        # Train the model (continuing from fit example)
+        ib = InformationBottleneck(n_clusters=8, beta=2.0)
+        ib.fit(X_train, Y_train)
+        
+        # Make predictions on new data
+        Y_pred = ib.predict(X_test)
+        
+        # Evaluate performance
+        accuracy = accuracy_score(Y_test, Y_pred)
+        # Removed print spam: f"...
+        # Removed print spam: f"...
+        print(f"🔢 Actual:      {Y_test[:10]}")
+        ```
+        
+        ```python
+        # 🔬 Advanced: Compare with probability predictions
+        # Get both hard predictions and soft probabilities
+        Y_pred_hard = ib.predict(X_test)
+        Y_pred_soft = ib.predict_proba(X_test)
+        
+        # Analyze prediction confidence
+        max_probs = np.max(Y_pred_soft, axis=1)
+        confident_predictions = Y_pred_hard[max_probs > 0.8]
+        
+        # Removed print spam: f"...} samples")
+        # Removed print spam: f"...} samples")
+        # Removed print spam: f"...:.3f}")
+        ```
+        """
         proba = self.predict_proba(X)
         return np.argmax(proba, axis=1)
     
@@ -606,14 +773,78 @@ class InformationBottleneck(BaseEstimator, TransformerMixin, CoreTheoryMixin,
     
     def fit(self, X, Y):
         """
-        Fit Information Bottleneck model.
+        🧠 Fit Information Bottleneck model - Learn optimal data compression for prediction!
+        
+        🎯 ELI5 EXPLANATION:
+        ==================
+        Think of Information Bottleneck like teaching a super-smart librarian to create the perfect 
+        summary system! The librarian (this method) looks at tons of books (X data) and their 
+        categories (Y labels), then learns to create short summaries that keep all the information 
+        needed to guess the category correctly, while throwing away everything irrelevant.
+        
+        It's like compression with a purpose:
+        • 📚 **Input**: Complex data X and what we want to predict Y
+        • 🔍 **Learning**: Find the minimal representation that preserves predictive power
+        • 🎯 **Result**: A compressed "summary" that's perfect for making predictions!
+        
+        🔬 RESEARCH FOUNDATION:
+        ======================
+        Implements Tishby & Zaslavsky (2015) Information Bottleneck principle:
+        "Find representation T that minimizes I(X;T) while maximizing I(T;Y)"
+        
+        Based on foundational papers:
+        - Tishby et al. (1999): "The information bottleneck method" 
+        - Schwartz-Ziv & Tishby (2017): "Opening the black box of deep neural networks"
         
         Parameters
         ----------
         X : array-like, shape (n_samples,) or (n_samples, n_features)
-            Input data
+            🔢 Input data to compress. Can be 1D sequence or 2D feature matrix.
+            Each sample represents an observation we want to learn from.
+            
         Y : array-like, shape (n_samples,)
-            Target variable
+            🎯 Target variable we want to predict from the compressed representation.
+            These are the "answers" that guide what information to keep.
+            
+        Returns
+        -------
+        self : InformationBottleneck
+            🔗 Fitted estimator ready for transform() and predict()
+            
+        Example Usage
+        -------------
+        ```python
+        # 🎯 Basic Information Bottleneck learning
+        from information_bottleneck import InformationBottleneck
+        import numpy as np
+        
+        # Generate sample data: noisy observations of underlying pattern
+        n_samples = 1000
+        X = np.random.randn(n_samples) + np.sin(np.linspace(0, 4*np.pi, n_samples))
+        Y = (X > 0).astype(int)  # Binary classification based on sign
+        
+        # Learn optimal compression for prediction
+        ib = InformationBottleneck(n_clusters=5, beta=1.0, max_iter=100)
+        ib.fit(X, Y)
+        
+        # The model now knows how to compress X while keeping Y-relevant info!
+        # Removed print spam: f"...
+        ```
+        
+        ```python
+        # 🔬 Advanced usage with parameter tuning
+        # Find the optimal compression-prediction trade-off
+        for beta in [0.1, 1.0, 10.0]:
+            ib = InformationBottleneck(beta=beta)
+            ib.fit(X, Y)
+            
+            # Check information preservation
+            compressed = ib.transform(X)
+            predictions = ib.predict(X) 
+            accuracy = np.mean(predictions == Y)
+            
+            print(f"β={beta}: Accuracy={accuracy:.3f}, Compression={ib.n_clusters}")
+        ```
         """
         X = np.asarray(X).flatten() if X.ndim > 1 else np.asarray(X)
         Y = np.asarray(Y).flatten()

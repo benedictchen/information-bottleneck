@@ -365,4 +365,3 @@ def test_visualization_with_matplotlib_errors():
 if __name__ == "__main__":
     test_ib_visualization_init()
     test_plot_information_curve()
-    print("✅ IB Visualization comprehensive tests completed!")

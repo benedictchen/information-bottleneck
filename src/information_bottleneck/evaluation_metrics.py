@@ -1,4 +1,35 @@
 """
+📋 Evaluation Metrics
+======================
+
+🔬 Research Foundation:
+======================  
+Based on information bottleneck principle:
+- Tishby, N., Pereira, F.C. & Bialek, W. (1999). "The Information Bottleneck Method"
+- Schwartz-Ziv, R. & Tishby, N. (2017). "Opening the Black Box of Deep Neural Networks"
+- Alemi, A.A. et al. (2016). "Deep Variational Information Bottleneck"
+🎯 ELI5 Summary:
+This file is an important component in our AI research system! Like different organs 
+in your body that work together to keep you healthy, this file has a specific job that 
+helps the overall algorithm work correctly and efficiently.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+📋 Component Integration:
+========================
+    ┌──────────┐
+    │   This   │
+    │Component │ ←→ Other Components
+    └──────────┘
+         ↑↓
+    System Integration
+
+"""
+"""
 ⚖️ Information Bottleneck Evaluation Metrics: Measuring Compression-Prediction Trade-offs
 =======================================================================================
 
@@ -700,7 +731,7 @@ def demo_evaluation():
     """
     Demonstrate Information Bottleneck evaluation on synthetic data
     """
-    print("🔍 Information Bottleneck Evaluation Demo")
+    # Removed print spam: "...
     print("=" * 50)
     
     # Generate synthetic data
@@ -725,7 +756,7 @@ def demo_evaluation():
     # Basic evaluation
     results = evaluator.evaluate_compression_prediction(X, T, Y)
     
-    print("\n📊 Basic Evaluation Results:")
+    # Removed print spam: "\n...
     for metric, value in results.items():
         print(f"  {metric}: {value:.4f}")
     
@@ -744,7 +775,7 @@ def demo_evaluation():
     # Compute β-curve
     curve_data = evaluator.compute_beta_curve(evaluation_results, beta_values)
     
-    print("\n📈 β-Curve Analysis:")
+    # Removed print spam: "\n...
     for i, beta in enumerate(beta_values):
         print(f"  β={beta:4.1f}: I(X;T)={curve_data['I_X_T'][i]:.4f}, "
               f"I(T;Y)={curve_data['I_T_Y'][i]:.4f}")
@@ -752,18 +783,18 @@ def demo_evaluation():
     # Plot information plane
     fig1 = evaluator.plot_information_plane(evaluation_results, beta_values)
     fig1.savefig('information_plane_demo.png', dpi=150, bbox_inches='tight')
-    print("\n📊 Information plane plot saved as 'information_plane_demo.png'")
+    # Removed print spam: "\n...
     
     # Plot β-curves  
     fig2 = evaluator.plot_beta_curves(curve_data)
     fig2.savefig('beta_curves_demo.png', dpi=150, bbox_inches='tight')
-    print("📊 β-curves plot saved as 'beta_curves_demo.png'")
+    # Removed print spam: "...
     
     # Generate report
     report = evaluator.generate_evaluation_report(results)
     print("\n" + report)
     
-    print("\n✅ Information Bottleneck evaluation demo completed!")
+    # Removed print spam: "\n...
 
 
 if __name__ == "__main__":

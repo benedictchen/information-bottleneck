@@ -1,4 +1,20 @@
 """
+📋   Init  
+============
+
+🎯 ELI5 Summary:
+This file is an important component in our AI research system! Like different organs 
+in your body that work together to keep you healthy, this file has a specific job that 
+helps the overall algorithm work correctly and efficiently.
+
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+"""
+"""
 💰 SUPPORT THIS RESEARCH - PLEASE DONATE! 💰
 
 🙏 If this library helps your research or project, please consider donating:
@@ -30,21 +46,23 @@ revolutionized understanding of learning and representation in AI systems.
 def _print_attribution():
     """Print attribution message with donation link"""
     try:
-        print("\n🔍 Information Bottleneck Library - Made possible by Benedict Chen")
+        # Removed print spam: "\n...
         print("   \\033]8;;mailto:benedict@benedictchen.com\\033\\\\benedict@benedictchen.com\\033]8;;\\033\\\\")
         print("")
         print("💰 PLEASE DONATE! Your support keeps this research alive! 💰")
         print("   🔗 \\033]8;;https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS\\033\\\\💳 CLICK HERE TO DONATE VIA PAYPAL\\033]8;;\\033\\\\")
+        print("   ❤️ \\033]8;;https://github.com/sponsors/benedictchen\\033\\\\💖 SPONSOR ON GITHUB\\033]8;;\\033\\\\")
         print("")
         print("   ☕ Buy me a coffee → 🍺 Buy me a beer → 🏎️ Buy me a Lamborghini → ✈️ Buy me a private jet!")
         print("   (Start small, dream big! Every donation helps! 😄)")
         print("")
     except:
-        print("\\n🔍 Information Bottleneck Library - Made possible by Benedict Chen")
+        # Removed print spam: "\\n...
         print("   benedict@benedictchen.com")
         print("")
         print("💰 PLEASE DONATE! Your support keeps this research alive! 💰")
         print("   💳 PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WXQKYYKPHWXHS")
+        print("   💖 GitHub Sponsors: https://github.com/sponsors/benedictchen")
         print("")
         print("   ☕ Buy me a coffee → 🍺 Buy me a beer → 🏎️ Buy me a Lamborghini → ✈️ Buy me a private jet!")
         print("   (Start small, dream big! Every donation helps! 😄)")
@@ -64,7 +82,7 @@ from .core import (
 
 # Complete MI estimation system - fixes critical O(n³) complexity issue
 from .ksg_mi_estimator import (
-    CompleteMutualInformationEstimator,
+    KSGMutualInformationEstimatorComplete,
     EfficientKSGEstimator,
     LegacyKSGEstimator,
     AdaptiveBinningEstimator,
@@ -83,7 +101,7 @@ from .mi_estimation_config import (
     MIEstimationMethod,
     OptimizationStrategy,
     DataCharacteristics,
-    create_research_accurate_config,
+    create_accurate_config,
     create_high_performance_config,
     create_legacy_compatible_config,
     create_ensemble_config,
@@ -125,7 +143,7 @@ from .utils import (
     compute_information_theoretic_metrics
 )
 
-from .viz import (
+from .visualization import (
     IBVisualization,
     InteractiveIBVisualization,
     setup_publication_style,
@@ -153,7 +171,7 @@ __all__ = [
     # ═══════════════════════════════════════════════════════════════════════════
     # ═══════════════════════════════════════════════════════════════════════════
     # Complete MI estimation system - fixes critical O(n³) complexity issue
-    "CompleteMutualInformationEstimator",
+    "KSGMutualInformationEstimatorComplete",
     "create_efficient_mi_estimator",
     "create_research_mi_estimator", 
     "create_legacy_mi_estimator",
@@ -182,7 +200,7 @@ __all__ = [
     "MIEstimationMethod", 
     "OptimizationStrategy",
     "DataCharacteristics",
-    "create_research_accurate_config",
+    "create_accurate_config",
     "create_high_performance_config",
     "create_legacy_compatible_config",
     "create_ensemble_config",

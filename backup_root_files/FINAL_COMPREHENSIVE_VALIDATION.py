@@ -49,12 +49,10 @@ def test_all_packages():
                 # Test with both parameter styles
                 try:
                     tpb1 = pkg_module.TensorProductBinding(role_dimension=8, filler_dimension=8)
-                    print("✅ Works with role_dimension/filler_dimension")
                     results[pkg] = 'REAL'
                 except Exception:
                     try:
                         tpb2 = pkg_module.TensorProductBinding(vector_dim=10)
-                        print("✅ Works with vector_dim (compatibility)")  
                         results[pkg] = 'REAL'
                     except Exception as e2:
                         print(f"❌ Both parameter styles failed")
@@ -97,7 +95,6 @@ def test_all_packages():
                     print(f"✅ Main classes: {', '.join(main_classes)}")
                     results[pkg] = 'REAL'
                 else:
-                    print("✅ Package imports successfully")
                     results[pkg] = 'REAL'
                     
         except Exception as e:
@@ -121,7 +118,7 @@ def test_all_packages():
     if real_count == total_count:
         print("🏆 COMPLETE SUCCESS! All packages fully functional!")
         print("🎯 The 'migration nightmare' has been completely resolved!")
-        print("🚀 All AI research implementations are now accessible!")
+        # print("🚀 All AI research implementations are now accessible!")
     
     return results
 

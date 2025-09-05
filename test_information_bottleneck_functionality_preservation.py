@@ -52,7 +52,7 @@ def test_existing_imports_preserved():
             MutualInfoEstimator,
             MutualInfoCore
         )
-        print("✅ Core Information Bottleneck imports preserved")
+        # # Removed print spam: "...
         
         # Test configuration imports
         from information_bottleneck import (
@@ -65,7 +65,7 @@ def test_existing_imports_preserved():
             MutualInfoEstimatorEnum,
             OptimizationMethod
         )
-        print("✅ Configuration system imports preserved")
+        # # Removed print spam: "...
         
         # Test utility imports
         from information_bottleneck import (
@@ -78,7 +78,7 @@ def test_existing_imports_preserved():
             normalize_data,
             discretize_data
         )
-        print("✅ Utility function imports preserved")
+        # # Removed print spam: "...
         
         return True
         
@@ -100,7 +100,7 @@ def test_new_complete_implementations_available():
             create_legacy_mi_estimator,
             MIEstimationResult
         )
-        print("✅ Complete MI estimation system imports available")
+        # # Removed print spam: "...
         
         # Test individual estimator classes
         from information_bottleneck import (
@@ -111,7 +111,7 @@ def test_new_complete_implementations_available():
             HistogramEstimator,
             SklearnMIEstimator
         )
-        print("✅ Individual MI estimator classes available")
+        # # Removed print spam: "...
         
         # Test configuration system
         from information_bottleneck import (
@@ -124,7 +124,7 @@ def test_new_complete_implementations_available():
             create_ensemble_config,
             create_gpu_accelerated_config
         )
-        print("✅ Complete configuration system available")
+        # # Removed print spam: "...
         
         return True
         
@@ -135,7 +135,7 @@ def test_new_complete_implementations_available():
 
 def test_critical_onlogn_complexity_fix():
     """Test that O(n³) complexity issue is fixed with new efficient implementation"""
-    print("\n⚡ Testing Critical O(n³) → O(n log n) Complexity Fix...")
+    # Removed print spam: "\n... → O(n log n) Complexity Fix...")
     
     try:
         from information_bottleneck import (
@@ -184,7 +184,7 @@ def test_critical_onlogn_complexity_fix():
                 'speedup': legacy_time / efficient_time if legacy_time != float('inf') else float('inf')
             }
             
-            print(f"    ✅ Efficient method: {efficient_time:.4f}s, MI: {efficient_result.mi_estimate:.4f}")
+            # Removed print spam: f"    ...
             if legacy_result:
                 speedup = legacy_time / efficient_time
                 print(f"    ⚠️  Legacy method: {legacy_time:.4f}s, MI: {legacy_result.mi_estimate:.4f}, Speedup: {speedup:.1f}x")
@@ -202,11 +202,11 @@ def test_critical_onlogn_complexity_fix():
             size_ratio = sizes[-1] / sizes[0]
             
             if time_ratio < size_ratio ** 2:  # Much better than quadratic
-                print(f"✅ Complexity fix verified: {size_ratio:.1f}x size → {time_ratio:.1f}x time")
+                # Removed print spam: f"...
             else:
                 print(f"⚠️  Complexity may not be fully optimized: {size_ratio:.1f}x size → {time_ratio:.1f}x time")
         
-        print("✅ O(n³) complexity issue resolved with efficient implementation")
+        # # Removed print spam: "... complexity issue resolved with efficient implementation")
         return True
         
     except Exception as e:
@@ -242,17 +242,17 @@ def test_all_mi_estimation_methods():
         try:
             import torch
             methods_to_test.append(MIEstimationMethod.MINE_NEURAL)
-            print("  📊 PyTorch available - including MINE neural estimation")
+            # Removed print spam: "  ...
         except ImportError:
-            print("  📊 PyTorch not available - skipping MINE estimation")
+            # Removed print spam: "  ...
         
         # Add sklearn if available
         try:
             from sklearn.feature_selection import mutual_info_regression
             methods_to_test.append(MIEstimationMethod.SKLEARN_WRAPPER)
-            print("  📊 Scikit-learn available - including sklearn wrapper")
+            # Removed print spam: "  ...
         except ImportError:
-            print("  📊 Scikit-learn not available - skipping sklearn wrapper")
+            # Removed print spam: "  ...
         
         results = {}
         
@@ -275,7 +275,7 @@ def test_all_mi_estimation_methods():
         # Verify results are reasonable (all positive, roughly similar for this data)
         mi_estimates = [r.mi_estimate for r in results.values()]
         if all(mi > 0 for mi in mi_estimates):
-            print("✅ All MI estimates are positive (as expected)")
+            # # Removed print spam: "...")
         else:
             print("⚠️  Some MI estimates are non-positive - may indicate issues")
         
@@ -283,7 +283,7 @@ def test_all_mi_estimation_methods():
         mi_std = np.std(mi_estimates)
         mi_mean = np.mean(mi_estimates)
         if mi_std / mi_mean < 0.5:  # Coefficient of variation < 50%
-            print(f"✅ MI estimates are reasonably consistent: {mi_mean:.4f} ± {mi_std:.4f}")
+            # Removed print spam: f"...
         else:
             print(f"⚠️  MI estimates vary significantly: {mi_mean:.4f} ± {mi_std:.4f}")
         
@@ -333,16 +333,16 @@ def test_automatic_method_selection():
             result = estimator.estimate(X, Y)
             selected_method = result.method_used
             
-            print(f"  📊 {scenario['name']}: selected {selected_method}")
+            # Removed print spam: f"  ...
             print(f"      Data size: {len(X)} samples, MI: {result.mi_estimate:.4f}")
             
             # Verify method makes sense for data type
             if scenario['expected_method_type'] in selected_method.lower():
-                print(f"      ✅ Method selection appropriate")
+                # Removed print spam: f"      ...
             else:
                 print(f"      ℹ️  Selected {selected_method}, expected {scenario['expected_method_type']}")
         
-        print("✅ Automatic method selection working")
+        # # Removed print spam: "...
         return True
         
     except Exception as e:
@@ -399,11 +399,11 @@ def test_ensemble_method():
         max_individual = max(individual_results)
         
         if min_individual <= result.mi_estimate <= max_individual:
-            print("      ✅ Ensemble result within reasonable range")
+            # Removed print spam: "      ...
         else:
             print(f"      ⚠️  Ensemble result ({result.mi_estimate:.4f}) outside individual range [{min_individual:.4f}, {max_individual:.4f}]")
         
-        print("✅ Ensemble method working")
+        # # Removed print spam: "...
         return True
         
     except Exception as e:
@@ -439,7 +439,7 @@ def test_configuration_flexibility():
         validation = custom_config.validate_config()
         assert validation['valid'], f"Custom configuration invalid: {validation['issues']}"
         
-        print("  ✅ Custom configuration creation and validation")
+        # Removed print spam: "  ...
         
         # Test factory functions
         configs_to_test = [
@@ -453,13 +453,13 @@ def test_configuration_flexibility():
             assert validation['valid'], f"{name} config invalid: {validation['issues']}"
             
             method_summary = validation['method_summary']
-            print(f"  ✅ {name}: method={method_summary.get('selected_method', 'unknown')}")
+            # Removed print spam: f"  ...}")
         
         # Test configuration method summary
         summary = custom_config._get_method_summary()
         assert 'selected_method' in summary
         assert 'research_basis' in summary
-        print(f"  ✅ Configuration summary: {summary['selected_method']}")
+        # Removed print spam: f"  ...
         
         # Test data-driven configuration recommendation
         recommended_config = custom_config.get_recommended_config_for_data(
@@ -468,7 +468,7 @@ def test_configuration_flexibility():
         
         rec_validation = recommended_config.validate_config()
         assert rec_validation['valid'], "Recommended configuration should be valid"
-        print("  ✅ Data-driven configuration recommendation")
+        # Removed print spam: "  ...
         
         return True
         
@@ -496,7 +496,7 @@ def test_backward_compatibility():
         # These functions should still work as before
         try:
             mi_legacy = compute_mutual_information_ksg(X, Y)
-            print(f"  ✅ Legacy KSG function: MI = {mi_legacy:.4f}")
+            # Removed print spam: f"  ...
         except Exception as e:
             print(f"  ⚠️  Legacy KSG function issue: {e}")
         
@@ -506,7 +506,7 @@ def test_backward_compatibility():
         
         try:
             mi_discrete = compute_mutual_information_discrete(X_discrete, Y_discrete)
-            print(f"  ✅ Legacy discrete MI: MI = {mi_discrete:.4f}")
+            # Removed print spam: f"  ...
         except Exception as e:
             print(f"  ⚠️  Legacy discrete MI issue: {e}")
         
@@ -514,7 +514,7 @@ def test_backward_compatibility():
         try:
             mi_core = MutualInfoCore()
             mi_estimate = mi_core.estimate(X, Y)
-            print(f"  ✅ MutualInfoCore class: MI = {mi_estimate:.4f}")
+            # Removed print spam: f"  ...
         except Exception as e:
             print(f"  ⚠️  MutualInfoCore issue: {e}")
         
@@ -525,7 +525,7 @@ def test_backward_compatibility():
         legacy_estimator = CompleteMutualInformationEstimator(legacy_config)
         
         result = legacy_estimator.estimate(X.reshape(-1, 1), Y.reshape(-1, 1))
-        print(f"  ✅ New system with legacy method: MI = {result.mi_estimate:.4f}")
+        # Removed print spam: f"  ...
         
         return True
         
@@ -554,29 +554,29 @@ def test_research_accuracy_validation():
         estimator = CompleteMutualInformationEstimator(config)
         
         result_independent = estimator.estimate(X_independent, Y_independent)
-        print(f"  📊 Independent variables: MI = {result_independent.mi_estimate:.4f} (should be ≈ 0)")
+        # Removed print spam: f"  ...")
         
         # Perfectly correlated variables should have high MI
         X_correlated = np.random.randn(n_samples, 1)
         Y_correlated = X_correlated + 0.01 * np.random.randn(n_samples, 1)  # Almost perfect correlation
         
         result_correlated = estimator.estimate(X_correlated, Y_correlated)
-        print(f"  📊 Highly correlated variables: MI = {result_correlated.mi_estimate:.4f} (should be high)")
+        # Removed print spam: f"  ...")
         
         # Verify research basis is documented
         method_summary = result_independent.diagnostics.get('config_summary', {})
         if 'research_basis' in method_summary:
             research_basis = method_summary['research_basis']
-            print(f"  ✅ Research basis documented: {research_basis}")
+            # Removed print spam: f"  ...
         
         # Verify complexity is documented
         if 'method_complexity' in result_independent.diagnostics:
             complexity = result_independent.diagnostics['method_complexity']
-            print(f"  ✅ Complexity documented: {complexity}")
+            # Removed print spam: f"  ...
         
         # Test that highly correlated data gives higher MI than independent data
         if result_correlated.mi_estimate > result_independent.mi_estimate + 0.1:
-            print("  ✅ MI correctly distinguishes independence vs correlation")
+            # Removed print spam: "  ...
         else:
             print("  ⚠️  MI may not be properly distinguishing correlation levels")
         
@@ -589,7 +589,7 @@ def test_research_accuracy_validation():
 
 def test_performance_diagnostics():
     """Test comprehensive diagnostics and performance monitoring"""
-    print("\n📊 Testing Performance Diagnostics...")
+    # Removed print spam: "\n...
     
     try:
         from information_bottleneck import create_efficient_mi_estimator
@@ -609,17 +609,17 @@ def test_performance_diagnostics():
         assert result.n_samples == 500, "Should track sample count"
         assert result.method_used is not None, "Should track method used"
         
-        print(f"  📊 MI estimate: {result.mi_estimate:.4f}")
+        # Removed print spam: f"  ...
         print(f"  ⏱️  Computation time: {result.computation_time:.4f}s")
-        print(f"  🔧 Method used: {result.method_used}")
-        print(f"  📈 Samples processed: {result.n_samples}")
+        # Removed print spam: f"  ...
+        # Removed print spam: f"  ...
         
         # Test diagnostics
         if result.diagnostics:
             diag = result.diagnostics
             if 'data_characteristics' in diag:
                 data_chars = diag['data_characteristics']
-                print(f"  📊 Data type: {data_chars.get('data_size_category', 'unknown')}")
+                # Removed print spam: f"  ...}")
             
             if 'config_summary' in diag:
                 config_summary = diag['config_summary']
@@ -628,10 +628,10 @@ def test_performance_diagnostics():
         # Test system diagnostics
         system_diag = estimator.get_diagnostics()
         if system_diag:
-            print(f"  🔧 Available methods: {len(system_diag.get('available_methods', []))}")
-            print(f"  📈 Total estimations: {system_diag.get('estimation_history_count', 0)}")
+            # Removed print spam: f"  ...)}")
+            # Removed print spam: f"  ...}")
         
-        print("  ✅ Comprehensive diagnostics available")
+        # Removed print spam: "  ...
         
         # Test benchmarking capability
         benchmark_results = estimator.benchmark_methods(X, Y)
@@ -652,7 +652,7 @@ def test_performance_diagnostics():
 
 def run_all_tests():
     """Run all functionality preservation and enhancement tests"""
-    print("🚀 INFORMATION BOTTLENECK - FUNCTIONALITY PRESERVATION TEST SUITE")
+    # # Removed print spam: "...
     print("=" * 90)
     
     all_passed = True
@@ -699,7 +699,7 @@ def run_all_tests():
     all_passed &= test_results['diagnostics']
     
     print("\n" + "=" * 90)
-    print("📊 TEST RESULTS SUMMARY:")
+    # Removed print spam: "...
     print("=" * 90)
     
     for test_name, passed in test_results.items():
@@ -708,19 +708,19 @@ def run_all_tests():
     
     print("=" * 90)
     if all_passed:
-        print("🎉 ALL TESTS PASSED - INFORMATION BOTTLENECK ENHANCED & FUNCTIONALITY PRESERVED!")
-        print("✅ Existing functionality: PRESERVED")
-        print("✅ O(n³) complexity improved to O(n log n) with efficient implementation")
-        print("✅ All 6 MI estimation methods: WORKING")
-        print("✅ Automatic method selection: INTELLIGENT") 
-        print("✅ Ensemble combinations: ROBUST")
-        print("✅ Configuration system: COMPREHENSIVE")
-        print("✅ Backward compatibility: MAINTAINED")
-        print("✅ Research accuracy: VALIDATED with paper citations")
-        print("✅ Performance diagnostics: COMPREHENSIVE")
+        # Removed print spam: "...
+        # # Removed print spam: "...
+        # # Removed print spam: "... complexity improved to O(n log n) with efficient implementation")
+        # # Removed print spam: "...
+        # # Removed print spam: "... 
+        # # Removed print spam: "...
+        # # Removed print spam: "...
+        # # Removed print spam: "...
+        # # Removed print spam: "...
+        # # Removed print spam: "...
         print("\n🔬 Ready for production use with complete Information Bottleneck implementation!")
-        print("📈 Performance improvement: O(n³) → O(n log n) for mutual information computation")
-        print("🎯 Research accuracy: All methods cite original papers and follow specifications")
+        # Removed print spam: "... → O(n log n) for mutual information computation")
+        # Removed print spam: "...
     else:
         print("❌ SOME TESTS FAILED - REVIEW NEEDED")
         failed_tests = [name for name, passed in test_results.items() if not passed]

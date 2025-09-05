@@ -1,4 +1,21 @@
 """
+🧠 Mutual Info Core
+====================
+
+🔬 Research Foundation:
+======================  
+Based on information bottleneck principle:
+- Tishby, N., Pereira, F.C. & Bialek, W. (1999). "The Information Bottleneck Method"
+- Schwartz-Ziv, R. & Tishby, N. (2017). "Opening the Black Box of Deep Neural Networks"
+- Alemi, A.A. et al. (2016). "Deep Variational Information Bottleneck"
+🧪 Technical Details:
+===================
+Implementation details and technical specifications for this component.
+Designed to work seamlessly within the research framework while
+maintaining high performance and accuracy standards.
+
+"""
+"""
 📊 Mutual Information Core - The Mathematical Heart of Information Theory
 ========================================================================
 

@@ -132,4 +132,3 @@ def test_demo_with_real_ib_class():
 if __name__ == "__main__":
     test_demo_advanced_features_comprehensive()
     test_demo_import_functionality()
-    print("✅ All demo tests passed!")

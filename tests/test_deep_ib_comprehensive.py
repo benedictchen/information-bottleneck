@@ -199,4 +199,3 @@ def test_deep_ib_configuration():
 if __name__ == "__main__":
     test_deep_ib_import()
     test_deep_information_bottleneck_creation()
-    print("✅ Deep IB tests completed!")

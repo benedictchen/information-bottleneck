@@ -44,7 +44,7 @@ def test_information_bottleneck():
     accuracy = np.mean(predictions == Y)
     print(f"   ✓ Accuracy: {accuracy:.3f}")
     
-    print("✅ Information Bottleneck test passed!")
+    # # Removed print spam: "...
     
     return True
 
